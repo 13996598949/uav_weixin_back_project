@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 配置文件路径 -->
+    <context id="context1" defaultModelType="flat">
+        <!--与数据库关键字同名时自动添加分隔符 ``-->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/uav"
+                        userId="root"
+                        password="root"/>
+        <javaModelGenerator targetPackage="com.lp.uav_weixin_back_project.uav_index.model.po" targetProject="src/main/java">
+            <property name="rootClass" value="com.lp.uav_weixin_back_project.model.Model"/>
+        </javaModelGenerator>
+
+        <!--如存在同名文件会合并，自定义方法不会更改，@mbg.generated 标记的会被更新-->
+        <sqlMapGenerator targetPackage="com.lp.sqlMapper.index" targetProject="src/main/resources"/>
+
+        <table tableName="user" mapperName="user" domainObjectName="User" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>
+    </context>
+</generatorConfiguration>

@@ -4,16 +4,16 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/uav
       username: root
       password: root
-    http:
-        encoding:
-          charset: UTF-8
-          enabled: true
-          force: true
+  http:
+      encoding:
+        charset: UTF-8
+        enabled: true
+        force: true
 mybatis:
-    mapper-locations:
-      - classpath*:/com/lp/sqlMapper/**/*.xml
+  mapper-locations:
+    - classpath*:/com/lp/sqlMapper/**/*.xml
 server:
   port: 8081
 custom:
-    location: C:/nginx-1.12.2/html
-    imgPath: /image/user/
+  location: C:/nginx-1.12.2/html
+  imgPath: /image/user/

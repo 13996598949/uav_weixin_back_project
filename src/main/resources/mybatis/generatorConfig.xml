@@ -24,7 +24,7 @@
         <!--如存在同名文件会合并，自定义方法不会更改，@mbg.generated 标记的会被更新-->
         <sqlMapGenerator targetPackage="com.lp.sqlMapper.index" targetProject="src/main/resources"/>
 
-        <table tableName="user" mapperName="user" domainObjectName="User" enableCountByExample="false" enableDeleteByExample="false"
+        <table tableName="rent_product" mapperName="RentProduct" domainObjectName="RentProductPo" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

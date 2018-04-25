@@ -1,9 +1,6 @@
-package com.lp.uav_weixin_back_project.uav_index.interceptor;
+package com.lp.uav_weixin_back_project.interceptor;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

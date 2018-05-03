@@ -9,6 +9,11 @@ spring:
         charset: UTF-8
         enabled: true
         force: true
+
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:D:\UAV_img
 mybatis:
   mapper-locations:
     - classpath*:/com/lp/sqlMapper/**/*.xml

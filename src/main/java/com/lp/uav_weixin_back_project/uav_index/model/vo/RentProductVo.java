@@ -17,8 +17,6 @@ public class RentProductVo extends Model {
 
     private Integer credit;
 
-    private Integer isHot;
-
     public Integer getCredit() {
         return credit;
     }
@@ -75,11 +73,4 @@ public class RentProductVo extends Model {
         this.rentProductPicture = rentProductPicture;
     }
 
-    public Integer getIsHot() {
-        return isHot;
-    }
-
-    public void setIsHot(Integer isHot) {
-        this.isHot = isHot;
-    }
 }

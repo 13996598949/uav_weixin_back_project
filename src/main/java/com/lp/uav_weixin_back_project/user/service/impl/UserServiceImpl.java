@@ -2,9 +2,9 @@ package com.lp.uav_weixin_back_project.user.service.impl;
 
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
-import com.lp.uav_weixin_back_project.user.model.dto.UserDto;
-import com.lp.uav_weixin_back_project.user.model.dto.UserEditBasicDto;
-import com.lp.uav_weixin_back_project.user.model.dto.UserLoginDto;
+import com.lp.uav_weixin_back_project.user.model.dto.*;
+import com.lp.uav_weixin_back_project.user.model.vo.AddressCallbackListVo;
+import com.lp.uav_weixin_back_project.user.model.vo.AddressListVo;
 import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
 import com.lp.uav_weixin_back_project.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,105 @@ public class UserServiceImpl implements UserService {
         UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
 
         return userVo;
+    }
+
+    @Override
+    public Integer editLoginPassword(int id, EditPasswordDto passwordDto) throws MyError {
+        // 获取原密码
+        String oldPassword = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getLoginPasswordById",id);
+        // 比较原密码
+        if (!oldPassword.equals(passwordDto.getOldPassword())){
+            throw new MyError("原密码输入不正确");
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("newPassword",passwordDto.getNewPassword());
+        int count = baseDao.update("com.lp.sqlMapper.user.User.editLoginPassword",map);
+
+        return count;
+    }
+
+    @Override
+    public Integer editBuyPassword(int id, EditPasswordDto passwordDto) throws MyError {
+        // 获取原密码
+        String oldPassword = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getBuyPasswordById",id);
+        // 比较原密码
+        if (!oldPassword.equals(passwordDto.getOldPassword())){
+            throw new MyError("原密码输入不正确");
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("newPassword",passwordDto.getNewPassword());
+        int count = baseDao.update("com.lp.sqlMapper.user.User.editBuyPassword",map);
+        return count;
+    }
+
+    @Override
+    public List<AddressCallbackListVo> getAddressList(int userId) {
+        List<AddressListVo> addressList = baseDao.getList("com.lp.sqlMapper.user.User.getAddressList",userId);
+        List<AddressCallbackListVo> addressCallbackListVos = new ArrayList<>();
+        if (addressList!=null && addressList.size()>0) {
+            for (AddressListVo avo : addressList){
+                AddressCallbackListVo bvo = new AddressCallbackListVo();
+                bvo.setId(avo.getId());
+                bvo.setName(avo.getReceiveName());
+                bvo.setAddress(avo.getProvince() +" "+ avo.getCity() +" "+ avo.getCounty() +" "+ avo.getDistrictDetail());
+                bvo.setTel(avo.getTelephone());
+                addressCallbackListVos.add(bvo);
+            }
+        }
+
+        return addressCallbackListVos;
+    }
+
+    @Override
+    public int insertAddress(int userId, AddressDto addressDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("receiveName", addressDto.getReceiveName());
+        map.put("telephone", addressDto.getTelephone());
+        map.put("province", addressDto.getProvince());
+        map.put("city", addressDto.getCity());
+        map.put("county", addressDto.getCounty());
+        map.put("districtDetail", addressDto.getDistrictDetail());
+        map.put("postalCode", addressDto.getPostalCode());
+        int count = baseDao.insert("com.lp.sqlMapper.user.User.insertAddress",map);
+        if (count <= 0){
+            throw new MyError("添加失败");
+        }
+        return count;
+    }
+
+    @Override
+    public int editAddress(int id, AddressDto addressDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("receiveName", addressDto.getReceiveName());
+        map.put("telephone", addressDto.getTelephone());
+        map.put("province", addressDto.getProvince());
+        map.put("city", addressDto.getCity());
+        map.put("county", addressDto.getCounty());
+        map.put("districtDetail", addressDto.getDistrictDetail());
+        map.put("postalCode", addressDto.getPostalCode());
+        int count = baseDao.update("com.lp.sqlMapper.user.User.editAddress",map);
+        if (count <= 0){
+            throw new MyError("保存失败");
+        }
+        return count;
+    }
+
+    @Override
+    public AddressListVo getAddressById(int id) {
+        AddressListVo addressListVos = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getAddressListById",id);
+        return addressListVos;
+    }
+
+    @Override
+    public int deleteAddress(int id) {
+        int count = baseDao.delete("com.lp.sqlMapper.user.User.deleteAddress",id);
+        return count;
     }
 
     /**

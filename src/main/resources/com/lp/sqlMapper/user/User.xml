@@ -131,4 +131,148 @@
     FROM user
     WHERE id=#{id}
   </select>
+
+  <select id="getLoginPasswordById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT login_password FROM user WHERE id=#{id}
+  </select>
+
+  <update id="editLoginPassword" parameterType="java.util.Map">
+    update user
+    <set>
+      <if test="newPassword != null">
+        login_password=#{newPassword},
+      </if>
+    </set>
+    where id=#{id}
+  </update>
+
+  <select id="getBuyPasswordById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT buy_password FROM user WHERE id=#{id}
+  </select>
+
+  <update id="editBuyPassword" parameterType="java.util.Map">
+    update user
+    <set>
+      <if test="newPassword != null">
+        buy_password=#{newPassword},
+      </if>
+    </set>
+    where id=#{id}
+  </update>
+
+  <select id="getAddressList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.user.model.vo.AddressListVo">
+    SELECT
+      a.id AS id,
+      a.receive_name AS receiveName,
+      a.telephone AS telephone,
+      a.province AS province,
+      a.city AS city,
+      a.county AS county,
+      a.district_detail AS districtDetail,
+      a.postal_code AS postalCode
+      FROM address a LEFT JOIN user b ON a.user_id = b.id
+      WHERE b.id=#{userId}
+  </select>
+
+  <insert id="insertAddress" parameterType="java.util.Map">
+    insert into address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="receiveName != null">
+        receive_name,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="districtDetail != null">
+        district_detail,
+      </if>
+      <if test="postalCode != null">
+        postal_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="receiveName != null">
+        #{receiveName},
+      </if>
+      <if test="telephone != null">
+        #{telephone},
+      </if>
+      <if test="province != null">
+        #{province},
+      </if>
+      <if test="city != null">
+        #{city},
+      </if>
+      <if test="county != null">
+        #{county},
+      </if>
+      <if test="districtDetail != null">
+        #{districtDetail},
+      </if>
+      <if test="postalCode != null">
+        #{postalCode},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="editAddress" parameterType="java.util.Map">
+    update address
+    <set>
+      <if test="receiveName != null">
+        receive_name=#{receiveName},
+      </if>
+      <if test="telephone != null">
+        telephone=#{telephone},
+      </if>
+      <if test="province != null">
+        province=#{province},
+      </if>
+      <if test="city != null">
+        city=#{city},
+      </if>
+      <if test="county != null">
+        county=#{county},
+      </if>
+      <if test="districtDetail != null">
+        district_detail=#{districtDetail},
+      </if>
+      <if test="postalCode != null">
+        postal_code=#{postalCode},
+      </if>
+    </set>
+    where id=#{id}
+  </update>
+
+  <select id="getAddressListById" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.user.model.vo.AddressListVo">
+    SELECT
+      a.id AS id,
+      a.receive_name AS receiveName,
+      a.telephone AS telephone,
+      a.province AS province,
+      a.city AS city,
+      a.county AS county,
+      a.district_detail AS districtDetail,
+      a.postal_code AS postalCode
+      FROM address a
+      WHERE a.id=#{id}
+  </select>
+
+  <delete id="deleteAddress" parameterType="java.lang.Integer">
+    DELETE FROM address WHERE id=#{id}
+  </delete>
 </mapper>

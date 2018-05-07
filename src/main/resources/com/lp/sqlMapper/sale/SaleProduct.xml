@@ -10,6 +10,72 @@
         a.sale_product_price AS saleProductPrice,
         a.sale_product_picture AS saleProductPicture,
         b.credit as credit
-        FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+        FROM sale_product a LEFT JOIN user b on a.user_id = b.id order by a.create_time desc
     </select>
+
+    <insert id="insertSaleInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into sale_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="saleProductName != null">
+                sale_product_name,
+            </if>
+            <if test="saleProductDescribe != null">
+                sale_product_describe,
+            </if>
+            <if test="saleProductPrice != null">
+                sale_product_price,
+            </if>
+            <if test="saleProductPicture != null">
+                sale_product_picture,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="saleProductName != null">
+                #{saleProductName},
+            </if>
+            <if test="saleProductDescribe != null">
+                #{saleProductDescribe},
+            </if>
+            <if test="saleProductPrice != null">
+                #{saleProductPrice},
+            </if>
+            <if test="saleProductPicture != null">
+                #{saleProductPicture},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="lastUpdateTime != null">
+                #{lastUpdateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="insertSaleInfoPicture" parameterType="java.util.Map">
+        update sale_product
+        <set>
+            <if test="saleProductPicture != null">
+                sale_product_picture=#{saleProductPicture},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

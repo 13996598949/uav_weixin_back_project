@@ -10,7 +10,88 @@
       a.rent_product_price AS rentProductPrice,
       a.rent_product_picture AS rentProductPicture,
       b.credit as credit
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id ORDER BY a.create_time desc
   </select>
 
+  <insert id="insertRentInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+    insert into rent_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="rentProductName != null">
+        rent_product_name,
+      </if>
+      <if test="rentProductDescribe != null">
+        rent_product_describe,
+      </if>
+      <if test="rentProductPrice != null">
+        rent_product_price,
+      </if>
+      <if test="rentProductPicture != null">
+        rent_product_picture,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="rentProductName != null">
+        #{rentProductName},
+      </if>
+      <if test="rentProductDescribe != null">
+        #{rentProductDescribe},
+      </if>
+      <if test="rentProductPrice != null">
+        #{rentProductPrice},
+      </if>
+      <if test="rentProductPicture != null">
+        #{rentProductPicture},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="insertRentInfoPicture" parameterType="java.util.Map">
+    update rent_product
+    <set>
+      <if test="rentProductPicture != null">
+        rent_product_picture=#{rentProductPicture},
+      </if>
+    </set>
+    where id=#{id}
+  </update>
+
+  <select id="getRentDetailInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo">
+    SELECT
+      a.id AS id,
+      b.header AS header,
+      b.alias AS alias,
+      a.rent_product_name AS rentProductName,
+      a.rent_product_describe AS rentProductDescribe,
+      a.rent_product_price AS rentProductPrice,
+      a.rent_product_picture AS rentProductPicture,
+      b.credit AS credit,
+      a.type AS type,
+      a.create_time AS createTime,
+      a.last_update_time AS lastUpdateTime
+    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+  </select>
 </mapper>

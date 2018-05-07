@@ -2,10 +2,14 @@ package com.lp.uav_weixin_back_project.uav_rent.model.vo;
 
 import com.lp.uav_weixin_back_project.model.Model;
 
-public class RentProductVo extends Model {
+import java.util.Date;
+
+public class RentProductDetailVo extends Model {
     private Integer id;
 
-    private Integer userId;
+    private String header;
+
+    private String alias;
 
     private String rentProductName;
 
@@ -16,6 +20,56 @@ public class RentProductVo extends Model {
     private String rentProductPicture;
 
     private Integer credit;
+
+    private Integer type;
+
+    private Date createTime;
+
+    private String createTimeStr;
+
+    private Date lastUpdateTime;
+
+    private String lastUpdateTimeStr;
+
+    public Date getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(Date lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public String getLastUpdateTimeStr() {
+        return lastUpdateTimeStr;
+    }
+
+    public void setLastUpdateTimeStr(String lastUpdateTimeStr) {
+        this.lastUpdateTimeStr = lastUpdateTimeStr;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
 
     public Integer getCredit() {
         return credit;
@@ -33,12 +87,20 @@ public class RentProductVo extends Model {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getHeader() {
+        return header;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getRentProductName() {

@@ -2,7 +2,9 @@ package com.lp.uav_weixin_back_project.uav_sale.service.impl;
 
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
+import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectSaleVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +26,22 @@ public class SaleServiceImpl implements SaleService {
     private BaseDao baseDao;
 
     @Override
-    public List<SaleProductVo> getSaleAllInfo() {
+    public List<SaleProductVo> getSaleAllInfo(Integer userId) {
         List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getSaleAllInfo",null);
+        if (userId!=null && userId!=0){
+            List<CollectSaleVo> collectSaleVos = baseDao.getList("com.lp.sqlMapper.collect.CollectSale.getCollectSale",userId);
+            if (collectSaleVos!=null && collectSaleVos.size()>0){
+                if (saleProductVoList!=null && saleProductVoList.size()>0){
+                    for (SaleProductVo productVo : saleProductVoList){
+                        for (CollectSaleVo collectSaleVo : collectSaleVos){
+                            if (productVo.getId().equals(collectSaleVo.getId())){
+                                productVo.setCollectFlag(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return saleProductVoList;
     }
 
@@ -49,17 +66,78 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public int insertSaleInfoPicture(Integer id, MultipartFile multipartFile) throws MyError {
-        String fileName = multipartFile.getOriginalFilename();
-        fileName = System.currentTimeMillis()+fileName.substring(fileName.lastIndexOf("."));
-        try {
-            uploadFile(multipartFile.getBytes(), "D:/UAV_img/product" , fileName);
-        } catch (Exception e) {
-            throw new MyError("图片保存失败");
+        MultipartFile m = multipartFile;
+        if (m!=null) {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName = System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));
+            try {
+                uploadFile(multipartFile.getBytes(), "D:/UAV_img/product", fileName);
+            } catch (Exception e) {
+                throw new MyError("图片保存失败");
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("saleProductPicture", "product/" + fileName);
+            int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.insertSaleInfoPicture", map);
+            return count;
+        }else{
+            return 0;
         }
+    }
+
+    @Override
+    public SaleProductDetailVo getSaleDetailInfo(Integer id, Integer userId) {
+        SaleProductDetailVo saleProductDetailVo = baseDao.getOneBySqlId("com.lp.sqlMapper.sale.SaleProduct.getSaleDetailInfo",id);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (saleProductDetailVo.getCreateTime() != null && !saleProductDetailVo.getCreateTime().equals("")) {
+            saleProductDetailVo.setCreateTimeStr(format.format(saleProductDetailVo.getCreateTime()));
+        }
+        if (saleProductDetailVo.getLastUpdateTime() != null && !saleProductDetailVo.getLastUpdateTime().equals("")) {
+            saleProductDetailVo.setLastUpdateTimeStr(format.format(saleProductDetailVo.getLastUpdateTime()));
+        }
+
+        if (userId!=null && userId!=0){
+            List<CollectSaleVo> collectSaleVos = baseDao.getList("com.lp.sqlMapper.collect.CollectSale.getCollectSale",userId);
+            if (collectSaleVos!=null && collectSaleVos.size()>0){
+                if (saleProductDetailVo!=null){
+                    for (CollectSaleVo collectSaleVo : collectSaleVos){
+                        if (saleProductDetailVo.getId().equals(collectSaleVo.getId())){
+                            saleProductDetailVo.setCollectFlag(true);
+                        }
+                    }
+                }
+            }
+        }
+
+        return saleProductDetailVo;
+    }
+
+    @Override
+    public List<SaleProductVo> getMyPublishSale(Integer userId) {
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getMyPublishSale",userId);
+        return saleProductVoList;
+    }
+
+    @Override
+    public int editSaleInfo(Integer id, SaleProductDto saleProductDto) throws MyError {
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
-        map.put("saleProductPicture","product/"+fileName);
-        int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.insertSaleInfoPicture",map);
+        map.put("saleProductName",saleProductDto.getSaleProductName());
+        map.put("saleProductDescribe",saleProductDto.getSaleProductDescribe());
+        map.put("saleProductPrice",saleProductDto.getSaleProductPrice());
+        map.put("type",saleProductDto.getType());
+        map.put("lastUpdateTime",new Date());
+
+        int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.editSaleInfo",map);
+        if (count<=0){
+            throw new MyError("保存失败，系统错误！");
+        }
+        return count;
+    }
+
+    @Override
+    public int deleteMyPublishSale(Integer id) {
+        int count = baseDao.delete("com.lp.sqlMapper.sale.SaleProduct.deleteMyPublishSale",id);
         return count;
     }
 

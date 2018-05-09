@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lp.sqlMapper.collect.CollectRent">
+  <insert id="insertCollectRent" parameterType="java.util.Map">
+  insert into collect_rent
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="userId != null">
+      user_id,
+    </if>
+    <if test="productId != null">
+      rent_product_id,
+    </if>
+    <if test="createTime != null">
+      create_time,
+    </if>
+    <if test="lastUpdateTime != null">
+      last_update_time,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="userId != null">
+      #{userId},
+    </if>
+    <if test="productId != null">
+      #{productId},
+    </if>
+    <if test="createTime != null">
+      #{createTime},
+    </if>
+    <if test="lastUpdateTime != null">
+      #{lastUpdateTime},
+    </if>
+  </trim>
+</insert>
+
+  <select id="getCollectRent" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectRentVo">
+    SELECT
+    a.id AS id,
+    a.rent_product_name AS rentProductName,
+    a.rent_product_describe AS rentProductDescribe,
+    a.rent_product_price AS rentProductPrice,
+    a.rent_product_picture AS rentProductPicture
+    FROM rent_product a
+    LEFT JOIN collect_rent b ON a.id=b.rent_product_id
+    LEFT JOIN user c ON c.id=b.user_id
+    WHERE c.id=#{id}
+  </select>
+
+  <delete id="deleteCollectRent" parameterType="java.util.Map">
+    DELETE FROM collect_rent WHERE user_id=#{userId} AND rent_product_id=#{productId}
+  </delete>
+
+
+</mapper>

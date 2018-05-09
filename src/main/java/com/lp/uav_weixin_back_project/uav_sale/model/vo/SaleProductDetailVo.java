@@ -1,23 +1,23 @@
-package com.lp.uav_weixin_back_project.uav_rent.model.vo;
+package com.lp.uav_weixin_back_project.uav_sale.model.vo;
 
 import com.lp.uav_weixin_back_project.model.Model;
 
 import java.util.Date;
 
-public class RentProductDetailVo extends Model {
+public class SaleProductDetailVo extends Model {
     private Integer id;
 
     private String header;
 
     private String alias;
 
-    private String rentProductName;
+    private String saleProductName;
 
-    private String rentProductDescribe;
+    private String saleProductDescribe;
 
-    private Double rentProductPrice;
+    private Double saleProductPrice;
 
-    private String rentProductPicture;
+    private String saleProductPicture;
 
     private Integer credit;
 
@@ -113,35 +113,35 @@ public class RentProductDetailVo extends Model {
         this.alias = alias;
     }
 
-    public String getRentProductName() {
-        return rentProductName;
+    public String getSaleProductName() {
+        return saleProductName;
     }
 
-    public void setRentProductName(String rentProductName) {
-        this.rentProductName = rentProductName;
+    public void setSaleProductName(String saleProductName) {
+        this.saleProductName = saleProductName;
     }
 
-    public String getRentProductDescribe() {
-        return rentProductDescribe;
+    public String getSaleProductDescribe() {
+        return saleProductDescribe;
     }
 
-    public void setRentProductDescribe(String rentProductDescribe) {
-        this.rentProductDescribe = rentProductDescribe;
+    public void setSaleProductDescribe(String saleProductDescribe) {
+        this.saleProductDescribe = saleProductDescribe;
     }
 
-    public Double getRentProductPrice() {
-        return rentProductPrice;
+    public Double getSaleProductPrice() {
+        return saleProductPrice;
     }
 
-    public void setRentProductPrice(Double rentProductPrice) {
-        this.rentProductPrice = rentProductPrice;
+    public void setSaleProductPrice(Double saleProductPrice) {
+        this.saleProductPrice = saleProductPrice;
     }
 
-    public String getRentProductPicture() {
-        return rentProductPicture;
+    public String getSaleProductPicture() {
+        return saleProductPicture;
     }
 
-    public void setRentProductPicture(String rentProductPicture) {
-        this.rentProductPicture = rentProductPicture;
+    public void setSaleProductPicture(String saleProductPicture) {
+        this.saleProductPicture = saleProductPicture;
     }
 }

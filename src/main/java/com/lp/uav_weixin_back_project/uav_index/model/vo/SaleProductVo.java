@@ -17,6 +17,16 @@ public class SaleProductVo extends Model {
 
     private Integer credit;
 
+    private boolean isCollectFlag = false;
+
+    public boolean isCollectFlag() {
+        return isCollectFlag;
+    }
+
+    public void setCollectFlag(boolean collectFlag) {
+        isCollectFlag = collectFlag;
+    }
+
     public Integer getCredit() {
         return credit;
     }

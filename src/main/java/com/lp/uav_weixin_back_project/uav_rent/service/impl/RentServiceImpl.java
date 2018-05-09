@@ -2,6 +2,7 @@ package com.lp.uav_weixin_back_project.uav_rent.service.impl;
 
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
+import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectRentVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentProductDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo;
@@ -25,8 +26,22 @@ public class RentServiceImpl implements RentService {
     private BaseDao baseDao;
 
     @Override
-    public List<RentProductVo> getRentAllInfo() {
+    public List<RentProductVo> getRentAllInfo(Integer userId) {
         List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getRentAllInfo",null);
+        if (userId!=null && userId!=0){
+            List<CollectRentVo> collectRentVos = baseDao.getList("com.lp.sqlMapper.collect.CollectRent.getCollectRent",userId);
+            if (collectRentVos!=null && collectRentVos.size()>0){
+                if (rentProductVoList!=null && rentProductVoList.size()>0){
+                    for (RentProductVo productVo : rentProductVoList){
+                        for (CollectRentVo collectRentVo : collectRentVos){
+                            if (productVo.getId().equals(collectRentVo.getId())){
+                                productVo.setCollectFlag(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return rentProductVoList;
     }
 
@@ -51,33 +66,81 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public int insertRentInfoPicture(Integer id, MultipartFile multipartFile) throws MyError {
-        String fileName = multipartFile.getOriginalFilename();
-        fileName = System.currentTimeMillis()+fileName.substring(fileName.lastIndexOf("."));
-        try {
-            uploadFile(multipartFile.getBytes(), "D:/UAV_img/product" , fileName);
-        } catch (Exception e) {
-            throw new MyError("图片保存失败");
+        MultipartFile m = multipartFile;
+        if (m!=null) {
+            String fileName = multipartFile.getOriginalFilename();
+            fileName = System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));
+            try {
+                uploadFile(multipartFile.getBytes(), "D:/UAV_img/product", fileName);
+            } catch (Exception e) {
+                throw new MyError("图片保存失败");
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("rentProductPicture", "product/" + fileName);
+            int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.insertRentInfoPicture", map);
+            return count;
+        }else {
+            return 0;
         }
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("rentProductPicture","product/"+fileName);
-        int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.insertRentInfoPicture",map);
-        return count;
     }
 
     @Override
-    public RentProductDetailVo getRentDetailInfo(Integer id) {
+    public RentProductDetailVo getRentDetailInfo(Integer id, Integer userId) {
         RentProductDetailVo rentProductDetailVo = baseDao.getOneBySqlId("com.lp.sqlMapper.rent.RentProduct.getRentDetailInfo",id);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        if (rentProductDetailVo.getCreateTime() != null && rentProductDetailVo.getCreateTime().equals("")) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (rentProductDetailVo.getCreateTime() != null && !rentProductDetailVo.getCreateTime().equals("")) {
             rentProductDetailVo.setCreateTimeStr(format.format(rentProductDetailVo.getCreateTime()));
         }
-        if (rentProductDetailVo.getLastUpdateTime() != null && rentProductDetailVo.getLastUpdateTime().equals("")) {
+        if (rentProductDetailVo.getLastUpdateTime() != null && !rentProductDetailVo.getLastUpdateTime().equals("")) {
             rentProductDetailVo.setLastUpdateTimeStr(format.format(rentProductDetailVo.getLastUpdateTime()));
+        }
+
+        if (userId!=null && userId!=0){
+            List<CollectRentVo> collectRentVos = baseDao.getList("com.lp.sqlMapper.collect.CollectRent.getCollectRent",userId);
+            if (collectRentVos!=null && collectRentVos.size()>0){
+                if (rentProductDetailVo!=null){
+                    for (CollectRentVo collectRentVo : collectRentVos){
+                        if (rentProductDetailVo.getId().equals(collectRentVo.getId())){
+                            rentProductDetailVo.setCollectFlag(true);
+                        }
+                    }
+                }
+            }
         }
 
         return rentProductDetailVo;
     }
+
+    @Override
+    public List<RentProductVo> getMyPublishRent(Integer userId) {
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getMyPublishRent",userId);
+        return rentProductVoList;
+    }
+
+    @Override
+    public int editRentInfo(Integer id, RentProductDto rentProductDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("rentProductName",rentProductDto.getRentProductName());
+        map.put("rentProductDescribe",rentProductDto.getRentProductDescribe());
+        map.put("rentProductPrice",rentProductDto.getRentProductPrice());
+        map.put("type",rentProductDto.getType());
+        map.put("lastUpdateTime",new Date());
+
+        int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.editRentInfo",map);
+        if (count<=0){
+            throw new MyError("保存失败，系统错误！");
+        }
+        return count;
+    }
+
+    @Override
+    public int deleteMyPublishRent(Integer id) throws MyError {
+        int count = baseDao.delete("com.lp.sqlMapper.rent.RentProduct.deleteMyPublishRent",id);
+        return count;
+    }
+
 
     /**
      * 保存图片文件到指定目录

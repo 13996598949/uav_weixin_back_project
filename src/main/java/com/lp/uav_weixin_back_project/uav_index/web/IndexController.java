@@ -24,16 +24,16 @@ public class IndexController {
     @Autowired
     private IndexService indexService;
 
-    @GetMapping("getRentInfo")
-    public ResultEntity<List<RentProductVo>> getRentInfo() throws Exception {
-        List<RentProductVo> rentProductVoList = indexService.getRentInfo();
+    @GetMapping("getRentInfo/{userId}")
+    public ResultEntity<List<RentProductVo>> getRentInfo(@PathVariable Integer userId) throws Exception {
+        List<RentProductVo> rentProductVoList = indexService.getRentInfo(userId);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
 
-    @GetMapping("getSaleInfo")
-    public ResultEntity<List<SaleProductVo>> getSaleInfo() throws Exception {
-        List<SaleProductVo> saleProductVoList = indexService.getSaleInfo();
+    @GetMapping("getSaleInfo/{userId}")
+    public ResultEntity<List<SaleProductVo>> getSaleInfo(@PathVariable Integer userId) throws Exception {
+        List<SaleProductVo> saleProductVoList = indexService.getSaleInfo(userId);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }

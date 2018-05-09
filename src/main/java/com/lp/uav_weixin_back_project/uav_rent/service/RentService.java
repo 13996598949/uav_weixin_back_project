@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RentService {
 
-    List<RentProductVo> getRentAllInfo();
+    List<RentProductVo> getRentAllInfo(Integer userId);
 
     // 发布租赁信息
     int insertRentInfo(Integer userId, RentProductDto rentProductDto) throws MyError;
@@ -19,5 +19,11 @@ public interface RentService {
     int insertRentInfoPicture(Integer id, MultipartFile multipartFile) throws MyError;
 
     // 商品详细信息
-    RentProductDetailVo getRentDetailInfo(Integer id);
+    RentProductDetailVo getRentDetailInfo(Integer userId, Integer id);
+
+    List<RentProductVo> getMyPublishRent(Integer userId);
+
+    int editRentInfo(Integer id, RentProductDto rentProductDto) throws MyError;
+
+    int deleteMyPublishRent(Integer id) throws MyError;
 }

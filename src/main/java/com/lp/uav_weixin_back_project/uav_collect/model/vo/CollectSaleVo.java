@@ -1,11 +1,7 @@
-package com.lp.uav_weixin_back_project.uav_sale.model.vo;
+package com.lp.uav_weixin_back_project.uav_collect.model.vo;
 
-import com.lp.uav_weixin_back_project.model.Model;
-
-public class SaleProductVo extends Model {
+public class CollectSaleVo {
     private Integer id;
-
-    private Integer userId;
 
     private String saleProductName;
 
@@ -15,40 +11,12 @@ public class SaleProductVo extends Model {
 
     private String saleProductPicture;
 
-    private Integer credit;
-
-    private boolean isCollectFlag = false;
-
-    public boolean isCollectFlag() {
-        return isCollectFlag;
-    }
-
-    public void setCollectFlag(boolean collectFlag) {
-        isCollectFlag = collectFlag;
-    }
-
-    public Integer getCredit() {
-        return credit;
-    }
-
-    public void setCredit(Integer credit) {
-        this.credit = credit;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getSaleProductName() {

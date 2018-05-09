@@ -2,6 +2,7 @@ package com.lp.uav_weixin_back_project.uav_sale.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
 import org.apache.ibatis.annotations.Param;
@@ -20,9 +21,9 @@ public class SaleController {
     @Autowired
     private SaleService saleService;
 
-    @GetMapping("getSaleAllInfo")
-    public ResultEntity<List<SaleProductVo>> getRentAllInfo() throws Exception {
-        List<SaleProductVo> saleProductVoList = saleService.getSaleAllInfo();
+    @GetMapping("getSaleAllInfo/{userId}")
+    public ResultEntity<List<SaleProductVo>> getRentAllInfo(@PathVariable Integer userId) throws Exception {
+        List<SaleProductVo> saleProductVoList = saleService.getSaleAllInfo(userId);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }
@@ -37,6 +38,34 @@ public class SaleController {
     @PutMapping("insertSaleInfoPicture/{id}")
     public ResultEntity<Integer> insertSaleInfoPicture(@PathVariable Integer id,@Param("multipartFile")MultipartFile multipartFile) throws Exception {
         int count = saleService.insertSaleInfoPicture(id,multipartFile);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @GetMapping("getSaleDetailInfo/{id}/{userId}")
+    public ResultEntity<SaleProductDetailVo> getSaleDetailInfo(@PathVariable Integer id,@PathVariable Integer userId) throws Exception {
+        SaleProductDetailVo saleDetailInfo = saleService.getSaleDetailInfo(id,userId);
+        ResultEntity<SaleProductDetailVo> resultEntity = new ResultEntity<>(saleDetailInfo);
+        return resultEntity;
+    }
+
+    @GetMapping("getMyPublishSale/{userId}")
+    public ResultEntity<List<SaleProductVo>> getMyPublishSale(@PathVariable Integer userId) throws Exception {
+        List<SaleProductVo> saleProductVoList = saleService.getMyPublishSale(userId);
+        ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
+        return resultEntity;
+    }
+
+    @PutMapping("editSaleInfo/{id}")
+    public ResultEntity<Integer> editSaleInfo(@PathVariable Integer id,@RequestBody SaleProductDto saleProductDto) throws Exception {
+        int count = saleService.editSaleInfo(id,saleProductDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @DeleteMapping("deleteMyPublishSale/{id}")
+    public ResultEntity<Integer> deleteMyPublishSale(@PathVariable Integer id) throws Exception {
+        int count = saleService.deleteMyPublishSale(id);
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }

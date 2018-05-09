@@ -19,9 +19,9 @@ public class RentController {
     @Autowired
     private RentService rentService;
 
-    @GetMapping("getRentAllInfo")
-    public ResultEntity<List<RentProductVo>> getRentAllInfo() throws Exception {
-        List<RentProductVo> rentProductVoList = rentService.getRentAllInfo();
+    @GetMapping("getRentAllInfo/{userId}")
+    public ResultEntity<List<RentProductVo>> getRentAllInfo(@PathVariable Integer userId) throws Exception {
+        List<RentProductVo> rentProductVoList = rentService.getRentAllInfo(userId);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
@@ -40,10 +40,31 @@ public class RentController {
         return resultEntity;
     }
 
-    @GetMapping("getRentDetailInfo/{id}")
-    public ResultEntity<RentProductDetailVo> getRentDetailInfo(@PathVariable Integer id) throws Exception {
-        RentProductDetailVo rentDetailInfo = rentService.getRentDetailInfo(id);
+    @GetMapping("getRentDetailInfo/{id}/{userId}")
+    public ResultEntity<RentProductDetailVo> getRentDetailInfo(@PathVariable Integer id,@PathVariable Integer userId) throws Exception {
+        RentProductDetailVo rentDetailInfo = rentService.getRentDetailInfo(id,userId);
         ResultEntity<RentProductDetailVo> resultEntity = new ResultEntity<>(rentDetailInfo);
+        return resultEntity;
+    }
+
+    @GetMapping("getMyPublishRent/{userId}")
+    public ResultEntity<List<RentProductVo>> getMyPublishRent(@PathVariable Integer userId) throws Exception {
+        List<RentProductVo> rentProductVoList = rentService.getMyPublishRent(userId);
+        ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
+        return resultEntity;
+    }
+
+    @PutMapping("editRentInfo/{id}")
+    public ResultEntity<Integer> editRentInfo(@PathVariable Integer id,@RequestBody RentProductDto rentProductDto) throws Exception {
+        int count = rentService.editRentInfo(id,rentProductDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @DeleteMapping("deleteMyPublishRent/{id}")
+    public ResultEntity<Integer> deleteMyPublishRent(@PathVariable Integer id) throws Exception {
+        int count = rentService.deleteMyPublishRent(id);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
 }

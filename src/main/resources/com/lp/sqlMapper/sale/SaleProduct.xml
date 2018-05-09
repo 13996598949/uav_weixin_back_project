@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lp.sqlMapper.sale.SaleProduct">
-    <select id="getSaleAllInfo" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
+    <select id="getSaleAllInfo" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo">
         SELECT
         a.id AS id,
         b.id AS userId,
@@ -78,4 +78,58 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="getSaleDetailInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo">
+      SELECT
+      a.id AS id,
+      b.header AS header,
+      b.alias AS alias,
+      a.sale_product_name AS saleProductName,
+      a.sale_product_describe AS saleProductDescribe,
+      a.sale_product_price AS saleProductPrice,
+      a.sale_product_picture AS saleProductPicture,
+      b.credit AS credit,
+      a.type AS type,
+      a.create_time AS createTime,
+      a.last_update_time AS lastUpdateTime
+    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+    </select>
+
+    <select id="getMyPublishSale" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo">
+        SELECT
+      a.id AS id,
+      b.id AS userId,
+      a.sale_product_name AS saleProductName,
+      a.sale_product_describe AS saleProductDescribe,
+      a.sale_product_price AS saleProductPrice,
+      a.sale_product_picture AS saleProductPicture,
+      b.credit AS credit
+    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE b.id=#{userId} ORDER BY a.last_update_time DESC
+    </select>
+
+    <update id="editSaleInfo" parameterType="java.util.Map">
+        update sale_product
+        <set>
+            <if test="saleProductName != null">
+                sale_product_name=#{saleProductName},
+            </if>
+            <if test="saleProductDescribe != null">
+                sale_product_describe=#{saleProductDescribe},
+            </if>
+            <if test="saleProductPrice != null">
+                sale_product_price=#{saleProductPrice},
+            </if>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time=#{lastUpdateTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteMyPublishSale" parameterType="java.lang.Integer">
+        DELETE FROM sale_product WHERE id=#{id}
+    </delete>
 </mapper>

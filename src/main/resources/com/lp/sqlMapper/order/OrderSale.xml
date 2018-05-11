@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lp.sqlMapper.order.OrderSale">
+  <select id="getMySellSaleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.sell_id = #{userId} AND a.flag=1
+  </select>
+
+  <delete id="deleteSaleOrder" parameterType="java.lang.Integer">
+    DELETE FROM order_sale WHERE id=#{orderId}
+  </delete>
+
+  <insert id="insertSaleOrder" parameterType="java.util.Map">
+    insert into order_sale
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sellId != null">
+        sell_id,
+      </if>
+      <if test="buyId != null">
+        buy_id,
+      </if>
+      <if test="saleProductId != null">
+        sale_product_id,
+      </if>
+      <if test="addressId != null">
+        address_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+        <if test="createTime != null">
+            create_time,
+        </if>
+        <if test="lastUpdateTime != null">
+            last_update_time,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sellId != null">
+        #{sellId},
+      </if>
+      <if test="buyId != null">
+        #{buyId},
+      </if>
+      <if test="saleProductId != null">
+        #{saleProductId},
+      </if>
+      <if test="addressId != null">
+        #{addressId},
+      </if>
+      <if test="orderId != null">
+        #{orderId},
+      </if>
+        <if test="createTime != null">
+            #{createTime},
+        </if>
+        <if test="lastUpdateTime != null">
+            #{lastUpdateTime},
+        </if>
+    </trim>
+  </insert>
+</mapper>

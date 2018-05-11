@@ -9,6 +9,8 @@ public class SaleProductDetailVo extends Model {
 
     private String header;
 
+    private Integer userId;
+
     private String alias;
 
     private String saleProductName;
@@ -32,6 +34,14 @@ public class SaleProductDetailVo extends Model {
     private String lastUpdateTimeStr;
 
     private boolean isCollectFlag = false;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public boolean isCollectFlag() {
         return isCollectFlag;

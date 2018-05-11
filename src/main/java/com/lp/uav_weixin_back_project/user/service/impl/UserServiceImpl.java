@@ -49,9 +49,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVo login(UserLoginDto userLoginDto) throws MyError {
         UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserByPassword",userLoginDto);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String date = format.format(userVo.getBirthday());
-        userVo.setBirthdayStr(date);
+        if (userVo!=null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            if (userVo.getBirthday() != null && !userVo.getBirthday().equals("")) {
+                String date = format.format(userVo.getBirthday());
+                userVo.setBirthdayStr(date);
+            }
+        }
 
         if (userVo == null){
             throw new MyError("用户名或密码输入不正确");

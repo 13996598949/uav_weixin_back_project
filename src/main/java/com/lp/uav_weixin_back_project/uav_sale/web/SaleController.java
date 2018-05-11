@@ -69,4 +69,11 @@ public class SaleController {
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
+
+    @GetMapping("getSaleSimpleInfo/{id}")
+    public ResultEntity<SaleProductDetailVo> getSaleSimpleInfo(@PathVariable Integer id) throws Exception {
+        SaleProductDetailVo saleSimpleInfo = saleService.getSaleSimpleInfo(id);
+        ResultEntity<SaleProductDetailVo> resultEntity = new ResultEntity<>(saleSimpleInfo);
+        return resultEntity;
+    }
 }

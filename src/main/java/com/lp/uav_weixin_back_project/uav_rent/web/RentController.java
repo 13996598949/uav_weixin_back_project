@@ -67,4 +67,11 @@ public class RentController {
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
+
+    @GetMapping("getRentSimpleInfo/{id}")
+    public ResultEntity<RentProductDetailVo> getRentSimpleInfo(@PathVariable Integer id) throws Exception {
+        RentProductDetailVo rentDetailInfo = rentService.getRentSimpleInfo(id);
+        ResultEntity<RentProductDetailVo> resultEntity = new ResultEntity<>(rentDetailInfo);
+        return resultEntity;
+    }
 }

@@ -10,7 +10,7 @@
         a.sale_product_price AS saleProductPrice,
         a.sale_product_picture AS saleProductPicture,
         b.credit as credit
-        FROM sale_product a LEFT JOIN user b on a.user_id = b.id order by a.create_time desc
+        FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.create_time desc
     </select>
 
     <insert id="insertSaleInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
@@ -82,6 +82,7 @@
     <select id="getSaleDetailInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo">
       SELECT
       a.id AS id,
+      a.user_id AS userId,
       b.header AS header,
       b.alias AS alias,
       a.sale_product_name AS saleProductName,
@@ -92,7 +93,7 @@
       a.type AS type,
       a.create_time AS createTime,
       a.last_update_time AS lastUpdateTime
-    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id} and a.flag=0
     </select>
 
     <select id="getMyPublishSale" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo">
@@ -104,7 +105,7 @@
       a.sale_product_price AS saleProductPrice,
       a.sale_product_picture AS saleProductPicture,
       b.credit AS credit
-    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE b.id=#{userId} ORDER BY a.last_update_time DESC
+    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE b.id=#{userId} and a.flag=0 ORDER BY a.last_update_time DESC
     </select>
 
     <update id="editSaleInfo" parameterType="java.util.Map">
@@ -132,4 +133,26 @@
     <delete id="deleteMyPublishSale" parameterType="java.lang.Integer">
         DELETE FROM sale_product WHERE id=#{id}
     </delete>
+
+    <select id="getSaleSimpleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo">
+        SELECT
+      a.id AS id,
+      b.header AS header,
+      b.alias AS alias,
+      a.sale_product_name AS saleProductName,
+      a.sale_product_describe AS saleProductDescribe,
+      a.sale_product_price AS saleProductPrice,
+      a.sale_product_picture AS saleProductPicture,
+      b.credit AS credit,
+      a.type AS type,
+      a.create_time AS createTime,
+      a.last_update_time AS lastUpdateTime
+    FROM sale_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+    </select>
+
+    <update id="updateSaleProductFlag" parameterType="java.util.Map">
+        update sale_product
+        set flag = 1
+        where id=#{saleProductId}
+    </update>
 </mapper>

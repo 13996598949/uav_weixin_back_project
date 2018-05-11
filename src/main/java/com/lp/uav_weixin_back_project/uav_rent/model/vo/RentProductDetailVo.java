@@ -7,6 +7,8 @@ import java.util.Date;
 public class RentProductDetailVo extends Model {
     private Integer id;
 
+    private Integer userId;
+
     private String header;
 
     private String alias;
@@ -32,6 +34,14 @@ public class RentProductDetailVo extends Model {
     private String lastUpdateTimeStr;
 
     private boolean isCollectFlag = false;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public boolean isCollectFlag() {
         return isCollectFlag;

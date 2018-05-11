@@ -26,4 +26,6 @@ public interface RentService {
     int editRentInfo(Integer id, RentProductDto rentProductDto) throws MyError;
 
     int deleteMyPublishRent(Integer id) throws MyError;
+
+    RentProductDetailVo getRentSimpleInfo(Integer id);
 }

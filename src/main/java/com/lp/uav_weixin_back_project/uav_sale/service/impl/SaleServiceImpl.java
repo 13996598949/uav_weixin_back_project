@@ -89,11 +89,13 @@ public class SaleServiceImpl implements SaleService {
     public SaleProductDetailVo getSaleDetailInfo(Integer id, Integer userId) {
         SaleProductDetailVo saleProductDetailVo = baseDao.getOneBySqlId("com.lp.sqlMapper.sale.SaleProduct.getSaleDetailInfo",id);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (saleProductDetailVo.getCreateTime() != null && !saleProductDetailVo.getCreateTime().equals("")) {
-            saleProductDetailVo.setCreateTimeStr(format.format(saleProductDetailVo.getCreateTime()));
-        }
-        if (saleProductDetailVo.getLastUpdateTime() != null && !saleProductDetailVo.getLastUpdateTime().equals("")) {
-            saleProductDetailVo.setLastUpdateTimeStr(format.format(saleProductDetailVo.getLastUpdateTime()));
+        if (saleProductDetailVo!=null) {
+            if (saleProductDetailVo.getCreateTime() != null && !saleProductDetailVo.getCreateTime().equals("")) {
+                saleProductDetailVo.setCreateTimeStr(format.format(saleProductDetailVo.getCreateTime()));
+            }
+            if (saleProductDetailVo.getLastUpdateTime() != null && !saleProductDetailVo.getLastUpdateTime().equals("")) {
+                saleProductDetailVo.setLastUpdateTimeStr(format.format(saleProductDetailVo.getLastUpdateTime()));
+            }
         }
 
         if (userId!=null && userId!=0){
@@ -139,6 +141,21 @@ public class SaleServiceImpl implements SaleService {
     public int deleteMyPublishSale(Integer id) {
         int count = baseDao.delete("com.lp.sqlMapper.sale.SaleProduct.deleteMyPublishSale",id);
         return count;
+    }
+
+    @Override
+    public SaleProductDetailVo getSaleSimpleInfo(Integer id) {
+        SaleProductDetailVo saleProductSimpleVo = baseDao.getOneBySqlId("com.lp.sqlMapper.sale.SaleProduct.getSaleSimpleInfo",id);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (saleProductSimpleVo!=null) {
+            if (saleProductSimpleVo.getCreateTime() != null && !saleProductSimpleVo.getCreateTime().equals("")) {
+                saleProductSimpleVo.setCreateTimeStr(format.format(saleProductSimpleVo.getCreateTime()));
+            }
+            if (saleProductSimpleVo.getLastUpdateTime() != null && !saleProductSimpleVo.getLastUpdateTime().equals("")) {
+                saleProductSimpleVo.setLastUpdateTimeStr(format.format(saleProductSimpleVo.getLastUpdateTime()));
+            }
+        }
+        return saleProductSimpleVo;
     }
 
     /**

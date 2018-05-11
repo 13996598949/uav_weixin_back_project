@@ -24,4 +24,6 @@ public interface SaleService {
     int editSaleInfo(Integer id, SaleProductDto saleProductDto) throws MyError;
 
     int deleteMyPublishSale(Integer id);
+
+    SaleProductDetailVo getSaleSimpleInfo(Integer id);
 }

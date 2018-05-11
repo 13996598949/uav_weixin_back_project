@@ -89,11 +89,13 @@ public class RentServiceImpl implements RentService {
     public RentProductDetailVo getRentDetailInfo(Integer id, Integer userId) {
         RentProductDetailVo rentProductDetailVo = baseDao.getOneBySqlId("com.lp.sqlMapper.rent.RentProduct.getRentDetailInfo",id);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (rentProductDetailVo.getCreateTime() != null && !rentProductDetailVo.getCreateTime().equals("")) {
-            rentProductDetailVo.setCreateTimeStr(format.format(rentProductDetailVo.getCreateTime()));
-        }
-        if (rentProductDetailVo.getLastUpdateTime() != null && !rentProductDetailVo.getLastUpdateTime().equals("")) {
-            rentProductDetailVo.setLastUpdateTimeStr(format.format(rentProductDetailVo.getLastUpdateTime()));
+        if (rentProductDetailVo != null) {
+            if (rentProductDetailVo.getCreateTime() != null && !rentProductDetailVo.getCreateTime().equals("")) {
+                rentProductDetailVo.setCreateTimeStr(format.format(rentProductDetailVo.getCreateTime()));
+            }
+            if (rentProductDetailVo.getLastUpdateTime() != null && !rentProductDetailVo.getLastUpdateTime().equals("")) {
+                rentProductDetailVo.setLastUpdateTimeStr(format.format(rentProductDetailVo.getLastUpdateTime()));
+            }
         }
 
         if (userId!=null && userId!=0){
@@ -139,6 +141,21 @@ public class RentServiceImpl implements RentService {
     public int deleteMyPublishRent(Integer id) throws MyError {
         int count = baseDao.delete("com.lp.sqlMapper.rent.RentProduct.deleteMyPublishRent",id);
         return count;
+    }
+
+    @Override
+    public RentProductDetailVo getRentSimpleInfo(Integer id) {
+        RentProductDetailVo rentProductSimpleVo = baseDao.getOneBySqlId("com.lp.sqlMapper.rent.RentProduct.getRentSimpleInfo",id);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (rentProductSimpleVo!=null) {
+            if (rentProductSimpleVo.getCreateTime() != null && !rentProductSimpleVo.getCreateTime().equals("")) {
+                rentProductSimpleVo.setCreateTimeStr(format.format(rentProductSimpleVo.getCreateTime()));
+            }
+            if (rentProductSimpleVo.getLastUpdateTime() != null && !rentProductSimpleVo.getLastUpdateTime().equals("")) {
+                rentProductSimpleVo.setLastUpdateTimeStr(format.format(rentProductSimpleVo.getLastUpdateTime()));
+            }
+        }
+        return rentProductSimpleVo;
     }
 
 

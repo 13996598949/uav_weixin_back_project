@@ -10,7 +10,7 @@
       a.rent_product_price AS rentProductPrice,
       a.rent_product_picture AS rentProductPicture,
       b.credit as credit
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id ORDER BY a.create_time desc
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 ORDER BY a.create_time desc
   </select>
 
   <insert id="insertRentInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
@@ -82,6 +82,7 @@
   <select id="getRentDetailInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo">
     SELECT
       a.id AS id,
+      a.user_id AS userId,
       b.header AS header,
       b.alias AS alias,
       a.rent_product_name AS rentProductName,
@@ -92,7 +93,7 @@
       a.type AS type,
       a.create_time AS createTime,
       a.last_update_time AS lastUpdateTime
-    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id} and a.flag=0
   </select>
 
   <select id="getMyPublishRent" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo">
@@ -104,7 +105,7 @@
       a.rent_product_price AS rentProductPrice,
       a.rent_product_picture AS rentProductPicture,
       b.credit AS credit
-    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE b.id=#{userId} ORDER BY a.last_update_time DESC
+    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE b.id=#{userId} and a.flag=0 ORDER BY a.last_update_time DESC
   </select>
 
   <update id="editRentInfo" parameterType="java.util.Map">
@@ -132,4 +133,26 @@
   <delete id="deleteMyPublishRent" parameterType="java.lang.Integer">
     DELETE FROM rent_product WHERE id=#{id}
   </delete>
+
+  <select id="getRentSimpleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo">
+    SELECT
+      a.id AS id,
+      b.header AS header,
+      b.alias AS alias,
+      a.rent_product_name AS rentProductName,
+      a.rent_product_describe AS rentProductDescribe,
+      a.rent_product_price AS rentProductPrice,
+      a.rent_product_picture AS rentProductPicture,
+      b.credit AS credit,
+      a.type AS type,
+      a.create_time AS createTime,
+      a.last_update_time AS lastUpdateTime
+    FROM rent_product a LEFT JOIN user b ON a.user_id = b.id WHERE a.id=#{id}
+  </select>
+
+  <update id="updateRentProductFlag" parameterType="java.util.Map">
+    update rent_product
+    set flag = 1
+    where id=#{rentProductId}
+  </update>
 </mapper>

@@ -12,6 +12,16 @@ public class InsertOrderDto {
 
     private Integer addressId;
 
+    private Integer price;
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
     public Integer getRentDay() {
         return rentDay;
     }

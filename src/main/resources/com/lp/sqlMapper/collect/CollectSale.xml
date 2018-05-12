@@ -39,7 +39,8 @@
         a.sale_product_name AS saleProductName,
         a.sale_product_describe AS saleProductDescribe,
         a.sale_product_price AS saleProductPrice,
-        a.sale_product_picture AS saleProductPicture
+        a.sale_product_picture AS saleProductPicture,
+        a.flag AS flag
         FROM sale_product a
         LEFT JOIN collect_sale b ON a.id=b.sale_product_id
         LEFT JOIN user c ON c.id=b.user_id

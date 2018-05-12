@@ -11,6 +11,16 @@ public class CollectSaleVo {
 
     private String saleProductPicture;
 
+    private int flag;
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
     public Integer getId() {
         return id;
     }

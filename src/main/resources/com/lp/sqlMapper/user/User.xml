@@ -275,4 +275,8 @@
   <delete id="deleteAddress" parameterType="java.lang.Integer">
     DELETE FROM address WHERE id=#{id}
   </delete>
+
+  <select id="getBuyPassword" parameterType="java.util.Map" resultType="java.lang.String">
+    SELECT buy_password FROM user WHERE id=#{userId}
+  </select>
 </mapper>

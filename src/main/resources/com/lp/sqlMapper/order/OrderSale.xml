@@ -19,7 +19,7 @@
     DELETE FROM order_sale WHERE id=#{orderId}
   </delete>
 
-  <insert id="insertSaleOrder" parameterType="java.util.Map">
+  <insert id="insertSaleOrder" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="orderId">
     insert into order_sale
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="sellId != null">
@@ -34,8 +34,11 @@
       <if test="addressId != null">
         address_id,
       </if>
-      <if test="orderId != null">
-        order_id,
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="price != null">
+        price,
       </if>
         <if test="createTime != null">
             create_time,
@@ -57,8 +60,11 @@
       <if test="addressId != null">
         #{addressId},
       </if>
-      <if test="orderId != null">
-        #{orderId},
+      <if test="orderNum != null">
+        #{orderNum},
+      </if>
+      <if test="price != null">
+        #{price},
       </if>
         <if test="createTime != null">
             #{createTime},
@@ -68,4 +74,88 @@
         </if>
     </trim>
   </insert>
+
+  <select id="getMyBuySaleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.buy_id = #{userId} AND a.flag=1
+  </select>
+
+  <select id="getSaleOrderInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo">
+    SELECT
+      a.id AS productId,
+      b.id AS orderId,
+      b.price AS price,
+      a.sale_product_name AS productName,
+      c.alias AS buyAlias,
+      b.order_num AS orderNum,
+      b.create_time AS buyTime,
+      a.sale_product_picture AS picture,
+      b.active AS active,
+      d.receive_name AS receiveName,
+      d.telephone AS telephone,
+      d.province AS province,
+      d.city AS city,
+      d.county AS county,
+      d.district_detail AS district_detail,
+      b.post_company AS postCompany,
+      b.post_num AS postNum,
+      b.refund_res AS refundRes
+      FROM sale_product a
+      LEFT JOIN order_sale b ON a.id = b.sale_product_id
+      LEFT JOIN user c ON b.buy_id = c.id
+      LEFT JOIN address d ON b.address_id=d.id
+      WHERE b.id = #{orderId}
+  </select>
+
+  <update id="updateProductFlag" parameterType="java.lang.Integer">
+    update sale_product
+    SET flag=0
+    where id=#{productId}
+  </update>
+
+  <update id="toPaySale" parameterType="java.util.Map">
+    update order_sale
+    SET active=1
+    where id=#{orderId}
+  </update>
+
+  <update id="toRefundSaleOrder" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.ToRefundDto">
+    update order_sale
+    <set>
+      active=5,
+      <if test="refundRes != null">
+        refund_res=#{refundRes},
+      </if>
+    </set>
+    where id=#{orderId}
+  </update>
+
+  <update id="toSaleDelicery" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.ToDeliveryDto">
+    update order_sale
+    <set>
+      active=2,
+      <if test="postCompany != null">
+        post_company=#{postCompany},
+      </if>
+      <if test="postNum != null">
+        post_num=#{postNum},
+      </if>
+    </set>
+    where id=#{orderId}
+  </update>
+
+  <update id="toConfirmSaleOrder" parameterType="java.util.Map">
+    update order_sale
+    SET active=3
+    where id=#{orderId}
+  </update>
 </mapper>

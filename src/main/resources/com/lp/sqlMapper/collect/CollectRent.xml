@@ -39,7 +39,8 @@
     a.rent_product_name AS rentProductName,
     a.rent_product_describe AS rentProductDescribe,
     a.rent_product_price AS rentProductPrice,
-    a.rent_product_picture AS rentProductPicture
+    a.rent_product_picture AS rentProductPicture,
+    a.flag AS flag
     FROM rent_product a
     LEFT JOIN collect_rent b ON a.id=b.rent_product_id
     LEFT JOIN user c ON c.id=b.user_id

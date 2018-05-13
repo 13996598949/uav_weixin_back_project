@@ -48,4 +48,8 @@ public interface OrderService {
     OrderInfoVo toConfirmRentOrder(ConfirmDto confirmDto) throws MyError;
 
     OrderInfoVo toConfirmSaleOrder(ConfirmDto confirmDto) throws MyError;
+
+    OrderInfoVo toEvaluateRentOrder(EvaluateDto evaluateDto);
+
+    OrderInfoVo toEvaluateSaleOrder(EvaluateDto evaluateDto);
 }

@@ -8,6 +8,10 @@ public class OrderInfoVo {
 
     private Integer orderId;
 
+    private Integer sellId;
+
+    private Integer buyId;
+
     private Double price;
 
     private String productName;
@@ -43,6 +47,42 @@ public class OrderInfoVo {
     private String postCompany;
 
     private String postNum;
+
+    private Integer buy_evaluate_flag;
+
+    private Integer sale_evaluate_flag;
+
+    public Integer getBuy_evaluate_flag() {
+        return buy_evaluate_flag;
+    }
+
+    public void setBuy_evaluate_flag(Integer buy_evaluate_flag) {
+        this.buy_evaluate_flag = buy_evaluate_flag;
+    }
+
+    public Integer getSale_evaluate_flag() {
+        return sale_evaluate_flag;
+    }
+
+    public void setSale_evaluate_flag(Integer sale_evaluate_flag) {
+        this.sale_evaluate_flag = sale_evaluate_flag;
+    }
+
+    public Integer getSellId() {
+        return sellId;
+    }
+
+    public void setSellId(Integer sellId) {
+        this.sellId = sellId;
+    }
+
+    public Integer getBuyId() {
+        return buyId;
+    }
+
+    public void setBuyId(Integer buyId) {
+        this.buyId = buyId;
+    }
 
     public String getRefundRes() {
         return refundRes;

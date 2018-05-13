@@ -93,6 +93,8 @@
     SELECT
       a.id AS productId,
       b.id AS orderId,
+      b.sell_id AS sellId,
+      b.buy_id AS buyId,
       b.price AS price,
       a.sale_product_name AS productName,
       c.alias AS buyAlias,
@@ -108,7 +110,9 @@
       d.district_detail AS district_detail,
       b.post_company AS postCompany,
       b.post_num AS postNum,
-      b.refund_res AS refundRes
+      b.refund_res AS refundRes,
+      b.buy_evaluate_flag AS buy_evaluate_flag,
+      b.sale_evaluate_flag AS sale_evaluate_flag
       FROM sale_product a
       LEFT JOIN order_sale b ON a.id = b.sale_product_id
       LEFT JOIN user c ON b.buy_id = c.id
@@ -158,4 +162,63 @@
     SET active=3
     where id=#{orderId}
   </update>
+
+  <insert id="toEvaluateSaleOrder" parameterType="java.util.Map">
+    insert into evaluate_rent
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="tallPersonId != null">
+        tall_person_id,
+      </if>
+      <if test="talledPersonId != null">
+        talled_person_id,
+      </if>
+      <if test="evaluate != null">
+        evaluate,
+      </if>
+      <if test="goodFlag != null">
+        good_flag,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId},
+      </if>
+      <if test="tallPersonId != null">
+        #{tallPersonId},
+      </if>
+      <if test="talledPersonId != null">
+        #{talledPersonId},
+      </if>
+      <if test="evaluate != null">
+        #{evaluate},
+      </if>
+      <if test="goodFlag != null">
+        #{goodFlag},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateSaleActiveForEvaluate" parameterType="java.util.Map">
+    update order_sale
+    <set>
+      active=4,
+      <if test="buy_evaluate_flag != null">
+        buy_evaluate_flag=#{buy_evaluate_flag},
+      </if>
+      <if test="sale_evaluate_flag != null">
+        sale_evaluate_flag=#{sale_evaluate_flag},
+      </if>
+    </set>
+    where id=#{orderId}
+  </update>
+
 </mapper>

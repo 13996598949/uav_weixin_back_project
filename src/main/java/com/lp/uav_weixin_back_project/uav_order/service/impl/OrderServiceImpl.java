@@ -248,12 +248,56 @@ public class OrderServiceImpl implements OrderService {
         if (buyPassword.equals(confirmDto.getBuyPassword())) {
             map.put("orderId",confirmDto.getOrderId());
             int count = baseDao.update("com.lp.sqlMapper.order.OrderSale.toConfirmSaleOrder",map);
-            OrderInfoVo orderInfoVo = this.getRentOrderInfo(confirmDto.getOrderId());
+            OrderInfoVo orderInfoVo = this.getSaleOrderInfo(confirmDto.getOrderId());
             return orderInfoVo;
 
         }else {
             throw new MyError("交易密码输入错误，请重新输入！");
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public OrderInfoVo toEvaluateRentOrder(EvaluateDto evaluateDto) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",evaluateDto.getOrderId());
+        map.put("tallPersonId",evaluateDto.getTallPersonId());
+        map.put("talledPersonId",evaluateDto.getTalledPersonId());
+        map.put("evaluate",evaluateDto.getEvaluate());
+        map.put("goodFlag",evaluateDto.getGoodFlag());
+        map.put("createTime",new Date());
+        baseDao.insert("com.lp.sqlMapper.order.OrderRent.toEvaluateRentOrder",map);
+        if (evaluateDto.getFlag().equals("buy")){
+            map.put("buy_evaluate_flag",1);
+            baseDao.update("com.lp.sqlMapper.order.OrderRent.updateRentActiveForEvaluate", map);
+        }else if (evaluateDto.getFlag().equals("sale")){
+            map.put("sale_evaluate_flag",1);
+            baseDao.update("com.lp.sqlMapper.order.OrderRent.updateRentActiveForEvaluate", map);
+        }
+        OrderInfoVo orderInfoVo = this.getRentOrderInfo(evaluateDto.getOrderId());
+        return orderInfoVo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public OrderInfoVo toEvaluateSaleOrder(EvaluateDto evaluateDto) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",evaluateDto.getOrderId());
+        map.put("tallPersonId",evaluateDto.getTallPersonId());
+        map.put("talledPersonId",evaluateDto.getTalledPersonId());
+        map.put("evaluate",evaluateDto.getEvaluate());
+        map.put("goodFlag",evaluateDto.getGoodFlag());
+        map.put("createTime",new Date());
+        baseDao.insert("com.lp.sqlMapper.order.OrderSale.toEvaluateSaleOrder",map);
+        if (evaluateDto.getFlag().equals("buy")){
+            map.put("buy_evaluate_flag",1);
+            baseDao.update("com.lp.sqlMapper.order.OrderSale.updateSaleActiveForEvaluate", map);
+        }else if (evaluateDto.getFlag().equals("sale")){
+            map.put("sale_evaluate_flag",1);
+            baseDao.update("com.lp.sqlMapper.order.OrderSale.updateSaleActiveForEvaluate", map);
+        }
+        OrderInfoVo orderInfoVo = this.getRentOrderInfo(evaluateDto.getOrderId());
+        return orderInfoVo;
     }
 
     private String getOrderId(){

@@ -156,4 +156,18 @@ public class OrderController {
         ResultEntity<OrderInfoVo> resultEntity = new ResultEntity<>(orderInfoVo);
         return resultEntity;
     }
+
+    @PostMapping("toEvaluateRentOrder")
+    public ResultEntity<OrderInfoVo> toEvaluateRentOrder(@RequestBody EvaluateDto evaluateDto) throws Exception {
+        OrderInfoVo orderInfoVo = orderService.toEvaluateRentOrder(evaluateDto);
+        ResultEntity<OrderInfoVo> resultEntity = new ResultEntity<>(orderInfoVo);
+        return resultEntity;
+    }
+
+    @PostMapping("toEvaluateSaleOrder")
+    public ResultEntity<OrderInfoVo> toEvaluateSaleOrder(@RequestBody EvaluateDto evaluateDto) throws Exception {
+        OrderInfoVo orderInfoVo = orderService.toEvaluateSaleOrder(evaluateDto);
+        ResultEntity<OrderInfoVo> resultEntity = new ResultEntity<>(orderInfoVo);
+        return resultEntity;
+    }
 }

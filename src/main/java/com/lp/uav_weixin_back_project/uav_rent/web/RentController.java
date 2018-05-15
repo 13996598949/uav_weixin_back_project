@@ -2,6 +2,7 @@ package com.lp.uav_weixin_back_project.uav_rent.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentProductDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentRecordNumDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo;
 import com.lp.uav_weixin_back_project.uav_rent.service.RentService;
@@ -72,6 +73,13 @@ public class RentController {
     public ResultEntity<RentProductDetailVo> getRentSimpleInfo(@PathVariable Integer id) throws Exception {
         RentProductDetailVo rentDetailInfo = rentService.getRentSimpleInfo(id);
         ResultEntity<RentProductDetailVo> resultEntity = new ResultEntity<>(rentDetailInfo);
+        return resultEntity;
+    }
+
+    @PutMapping("recordRentNum")
+    public ResultEntity<Integer> recordRentNum(@RequestBody RentRecordNumDto recordNumDto) throws Exception {
+        Integer count = rentService.recordRentNum(recordNumDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
 }

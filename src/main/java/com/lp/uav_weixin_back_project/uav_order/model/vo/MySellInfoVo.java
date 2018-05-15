@@ -16,6 +16,16 @@ public class MySellInfoVo {
 
     private Integer active;
 
+    private Integer rentDay;
+
+    public Integer getRentDay() {
+        return rentDay;
+    }
+
+    public void setRentDay(Integer rentDay) {
+        this.rentDay = rentDay;
+    }
+
     public Integer getActive() {
         return active;
     }

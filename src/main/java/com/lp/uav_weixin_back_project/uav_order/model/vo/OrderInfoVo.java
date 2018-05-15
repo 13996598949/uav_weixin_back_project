@@ -52,6 +52,7 @@ public class OrderInfoVo {
 
     private Integer sale_evaluate_flag;
 
+
     public Integer getBuy_evaluate_flag() {
         return buy_evaluate_flag;
     }

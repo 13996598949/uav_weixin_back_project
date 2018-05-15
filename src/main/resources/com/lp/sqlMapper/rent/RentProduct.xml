@@ -9,7 +9,8 @@
       a.rent_product_describe AS rentProductDescribe,
       a.rent_product_price AS rentProductPrice,
       a.rent_product_picture AS rentProductPicture,
-      b.credit as credit
+      b.credit as credit,
+      a.type AS type
       FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 ORDER BY a.create_time desc
   </select>
 
@@ -154,5 +155,11 @@
     update rent_product
     set flag = 1
     where id=#{rentProductId}
+  </update>
+
+  <update id="recordRentNum" parameterType="java.util.Map">
+    update rent_product
+    set view_num = view_num+1
+    where id=#{productId}
   </update>
 </mapper>

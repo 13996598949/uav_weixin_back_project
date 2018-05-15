@@ -2,6 +2,8 @@ package com.lp.uav_weixin_back_project.uav_order.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.service.OrderService;
@@ -168,6 +170,83 @@ public class OrderController {
     public ResultEntity<OrderInfoVo> toEvaluateSaleOrder(@RequestBody EvaluateDto evaluateDto) throws Exception {
         OrderInfoVo orderInfoVo = orderService.toEvaluateSaleOrder(evaluateDto);
         ResultEntity<OrderInfoVo> resultEntity = new ResultEntity<>(orderInfoVo);
+        return resultEntity;
+    }
+
+    @GetMapping("getEvaluateRentInfo/{orderId}")
+    public ResultEntity<List<EvaluateInfoVo>> getEvaluateRentInfo(@PathVariable Integer orderId) throws Exception {
+        List<EvaluateInfoVo> evaluateInfoVos = orderService.getEvaluateRentInfo(orderId);
+        ResultEntity<List<EvaluateInfoVo>> resultEntity = new ResultEntity<>(evaluateInfoVos);
+        return resultEntity;
+    }
+
+    @GetMapping("getEvaluateSaleInfo/{orderId}")
+    public ResultEntity<List<EvaluateInfoVo>> getEvaluateSaleInfo(@PathVariable Integer orderId) throws Exception {
+        List<EvaluateInfoVo> evaluateInfoVos = orderService.getEvaluateSaleInfo(orderId);
+        ResultEntity<List<EvaluateInfoVo>> resultEntity = new ResultEntity<>(evaluateInfoVos);
+        return resultEntity;
+    }
+
+    @GetMapping("countOrderNum/{userId}")
+    public ResultEntity<CountOrderVo> countOrderNum(@PathVariable Integer userId) throws Exception {
+        CountOrderVo countOrderVo = orderService.countOrderNum(userId);
+        ResultEntity<CountOrderVo> resultEntity = new ResultEntity<>(countOrderVo);
+        return resultEntity;
+    }
+
+    @GetMapping("getPayingRentList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getPayingRentList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> payingRentList = orderService.getPayingRentList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(payingRentList);
+        return resultEntity;
+    }
+
+    @GetMapping("getPayingSaleList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getPayingSaleList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> payingSaleList = orderService.getPayingSaleList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(payingSaleList);
+        return resultEntity;
+    }
+
+    @GetMapping("getDeliveryRentList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getDeliveryRentList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> deliveryRentList = orderService.getDeliveryRentList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(deliveryRentList);
+        return resultEntity;
+    }
+
+    @GetMapping("getDeliverySaleList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getDeliverySaleList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> deliverySaleList = orderService.getDeliverySaleList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(deliverySaleList);
+        return resultEntity;
+    }
+
+    @GetMapping("getConfirmRentList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getConfirmRentList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> confirmRentList = orderService.getConfirmRentList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(confirmRentList);
+        return resultEntity;
+    }
+
+    @GetMapping("getConfirmSaleList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getConfirmSaleList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> confirmSaleList = orderService.getConfirmSaleList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(confirmSaleList);
+        return resultEntity;
+    }
+
+    @GetMapping("getEvaluateRentList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getEvaluateRentList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> evaluateRentList = orderService.getEvaluateRentList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(evaluateRentList);
+        return resultEntity;
+    }
+
+    @GetMapping("getEvaluateSaleList/{userId}")
+    public ResultEntity<List<MySellInfoVo>> getEvaluateSaleList(@PathVariable Integer userId) throws Exception {
+        List<MySellInfoVo> evaluateSaleList = orderService.getEvaluateSaleList(userId);
+        ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(evaluateSaleList);
         return resultEntity;
     }
 }

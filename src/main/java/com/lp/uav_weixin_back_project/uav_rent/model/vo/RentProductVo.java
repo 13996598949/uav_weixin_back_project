@@ -17,6 +17,16 @@ public class RentProductVo extends Model {
 
     private Integer credit;
 
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     private boolean isCollectFlag = false;
 
     public boolean isCollectFlag() {

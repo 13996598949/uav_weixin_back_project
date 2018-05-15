@@ -3,6 +3,8 @@ package com.lp.uav_weixin_back_project.uav_order.service.impl;
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.service.OrderService;
@@ -299,6 +301,109 @@ public class OrderServiceImpl implements OrderService {
         OrderInfoVo orderInfoVo = this.getRentOrderInfo(evaluateDto.getOrderId());
         return orderInfoVo;
     }
+
+    @Override
+    public List<EvaluateInfoVo> getEvaluateRentInfo(Integer orderId) {
+        List<EvaluateInfoVo> evaluateInfoVos = baseDao.getList("com.lp.sqlMapper.order.OrderRent.getEvaluateRentInfo",orderId);
+        if (evaluateInfoVos!=null && evaluateInfoVos.size()>0){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (EvaluateInfoVo vo :evaluateInfoVos){
+                if (vo.getTallTime()!=null && !vo.getTallTime().equals("")){
+                    vo.setTallTimeStr(format.format(vo.getTallTime()));
+                }
+            }
+        }
+        return evaluateInfoVos;
+    }
+
+    @Override
+    public List<EvaluateInfoVo> getEvaluateSaleInfo(Integer orderId) {
+        List<EvaluateInfoVo> evaluateInfoVos = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getEvaluateSaleInfo",orderId);
+        if (evaluateInfoVos!=null && evaluateInfoVos.size()>0){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (EvaluateInfoVo vo :evaluateInfoVos){
+                if (vo.getTallTime()!=null && !vo.getTallTime().equals("")){
+                    vo.setTallTimeStr(format.format(vo.getTallTime()));
+                }
+            }
+        }
+        return evaluateInfoVos;
+    }
+
+    @Override
+    public CountOrderVo countOrderNum(Integer userId) {
+        CountOrderVo countOrderVo = new CountOrderVo();
+        // 统计待付款的订单
+        int payNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countPayRent",userId);
+        int payNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countPaySale",userId);
+        countOrderVo.setPayNum(payNumRent+payNumSale);
+
+        // 统计待发货的订单
+        int deliveryNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countDeliveryRent",userId);
+        int deliveryNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countDeliverySale",userId);
+        countOrderVo.setDeliveryNum(deliveryNumRent+deliveryNumSale);
+
+        // 统计待收货的订单
+        int reviceNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countReviceRent",userId);
+        int reviceNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countReviceSale",userId);
+        countOrderVo.setReciveNum(reviceNumRent+reviceNumSale);
+
+        // 统计待评价的订单
+        int confirmNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countConfirmRent",userId);
+        int confirmNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countConfirmSale",userId);
+        countOrderVo.setConfirmNum(confirmNumRent+confirmNumSale);
+
+        return countOrderVo;
+    }
+
+    @Override
+    public List<MySellInfoVo> getPayingRentList(Integer userId) {
+        List<MySellInfoVo> payingRentList = baseDao.getList("com.lp.sqlMapper.order.OrderRent.getPayingRentList",userId);
+        return payingRentList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getPayingSaleList(Integer userId) {
+        List<MySellInfoVo> payingSaleList = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getPayingSaleList",userId);
+        return payingSaleList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getDeliveryRentList(Integer userId) {
+        List<MySellInfoVo> deliveryRentList = baseDao.getList("com.lp.sqlMapper.order.OrderRent.getDeliveryRentList",userId);
+        return deliveryRentList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getDeliverySaleList(Integer userId) {
+        List<MySellInfoVo> deliverySaleList = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getDeliverySaleList",userId);
+        return deliverySaleList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getConfirmRentList(Integer userId) {
+        List<MySellInfoVo> confirmRentList = baseDao.getList("com.lp.sqlMapper.order.OrderRent.getConfirmRentList",userId);
+        return confirmRentList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getConfirmSaleList(Integer userId) {
+        List<MySellInfoVo> confirmSaleList = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getConfirmSaleList",userId);
+        return confirmSaleList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getEvaluateRentList(Integer userId) {
+        List<MySellInfoVo> evaluateRentList = baseDao.getList("com.lp.sqlMapper.order.OrderRent.getEvaluateRentList",userId);
+        return evaluateRentList;
+    }
+
+    @Override
+    public List<MySellInfoVo> getEvaluateSaleList(Integer userId) {
+        List<MySellInfoVo> evaluateSaleList = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getEvaluateSaleList",userId);
+        return evaluateSaleList;
+    }
+
 
     private String getOrderId(){
         // 随机生成订单号 当前时间+五位随机数

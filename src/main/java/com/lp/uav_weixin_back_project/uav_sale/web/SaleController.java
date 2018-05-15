@@ -2,6 +2,7 @@ package com.lp.uav_weixin_back_project.uav_sale.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleRecordNumDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
@@ -74,6 +75,13 @@ public class SaleController {
     public ResultEntity<SaleProductDetailVo> getSaleSimpleInfo(@PathVariable Integer id) throws Exception {
         SaleProductDetailVo saleSimpleInfo = saleService.getSaleSimpleInfo(id);
         ResultEntity<SaleProductDetailVo> resultEntity = new ResultEntity<>(saleSimpleInfo);
+        return resultEntity;
+    }
+
+    @PutMapping("recordSaleNum")
+    public ResultEntity<Integer> recordSaleNum(@RequestBody SaleRecordNumDto saleRecordNumDto) throws Exception {
+        Integer count = saleService.recordSaleNum(saleRecordNumDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
 }

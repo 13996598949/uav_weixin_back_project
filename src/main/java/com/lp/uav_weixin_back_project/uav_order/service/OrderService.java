@@ -2,6 +2,8 @@ package com.lp.uav_weixin_back_project.uav_order.service;
 
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
 import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
 
@@ -52,4 +54,26 @@ public interface OrderService {
     OrderInfoVo toEvaluateRentOrder(EvaluateDto evaluateDto);
 
     OrderInfoVo toEvaluateSaleOrder(EvaluateDto evaluateDto);
+
+    List<EvaluateInfoVo> getEvaluateRentInfo(Integer orderId);
+
+    List<EvaluateInfoVo> getEvaluateSaleInfo(Integer orderId);
+
+    CountOrderVo countOrderNum(Integer userId);
+
+    List<MySellInfoVo> getPayingRentList(Integer userId);
+
+    List<MySellInfoVo> getPayingSaleList(Integer userId);
+
+    List<MySellInfoVo> getDeliveryRentList(Integer userId);
+
+    List<MySellInfoVo> getDeliverySaleList(Integer userId);
+
+    List<MySellInfoVo> getConfirmRentList(Integer userId);
+
+    List<MySellInfoVo> getConfirmSaleList(Integer userId);
+
+    List<MySellInfoVo> getEvaluateRentList(Integer userId);
+
+    List<MySellInfoVo> getEvaluateSaleList(Integer userId);
 }

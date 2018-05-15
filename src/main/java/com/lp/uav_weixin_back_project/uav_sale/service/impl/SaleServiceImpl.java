@@ -4,6 +4,7 @@ import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectSaleVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleRecordNumDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
@@ -156,6 +157,29 @@ public class SaleServiceImpl implements SaleService {
             }
         }
         return saleProductSimpleVo;
+    }
+
+    @Override
+    public Integer recordSaleNum(SaleRecordNumDto saleRecordNumDto) throws Exception{
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",saleRecordNumDto.getId());
+        map.put("userId",saleRecordNumDto.getUserId());
+
+        // 记录商品浏览量
+        int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.recordSaleNum", map);
+
+        // 记录用户浏览商品类别数
+        if (saleRecordNumDto.getType()!=null && !saleRecordNumDto.getType().equals("")){
+            if (saleRecordNumDto.getType()==0){
+                // 消费级
+                baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum",map);
+            } else if (saleRecordNumDto.getType()==1){
+                // 专业级
+                baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum",map);
+            }
+        }
+
+        return count;
     }
 
     /**

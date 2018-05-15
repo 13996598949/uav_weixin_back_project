@@ -221,4 +221,88 @@
     where id=#{orderId}
   </update>
 
+  <select id="getEvaluateSaleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo">
+    SELECT
+    b.header AS tallPersonPicture,
+    b.alias AS tallPersonAlias,
+    a.evaluate AS tallPersonEvaluate,
+    a.create_time AS tallTime,
+    a.good_flag AS goodFlag
+    FROM evaluate_sale a
+    LEFT JOIN user b ON a.tall_person_id = b.id
+    WHERE a.order_id=#{orderId}
+  </select>
+
+  <select id="countPaySale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 0
+  </select>
+
+  <select id="countDeliverySale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 1
+  </select>
+
+  <select id="countReviceSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 2
+  </select>
+
+  <select id="countConfirmSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 3
+  </select>
+
+  <select id="getPayingSaleList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=0
+  </select>
+
+  <select id="getDeliverySaleList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=1
+  </select>
+
+  <select id="getConfirmSaleList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=2
+  </select>
+
+  <select id="getEvaluateSaleList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
+    SELECT
+    a.id AS productId,
+    b.id AS orderId,
+    a.sale_product_name AS productName,
+    a.sale_product_price AS price,
+    a.sale_product_picture AS picture,
+    a.sale_product_describe AS productDescribe,
+    b.active AS active
+    FROM sale_product a
+    LEFT JOIN order_sale b ON a.id = b.sale_product_id
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=3
+  </select>
+
 </mapper>

@@ -2,6 +2,8 @@ package com.lp.uav_weixin_back_project.uav_index.model.vo;
 
 import com.lp.uav_weixin_back_project.model.Model;
 
+import java.util.Date;
+
 public class RentProductVo extends Model {
     private Integer id;
 
@@ -17,7 +19,48 @@ public class RentProductVo extends Model {
 
     private Integer credit;
 
+    private Integer type;
+
+    private Integer viewNum;
+
+    private Date createTime;
+
     private boolean isCollectFlag = false;
+
+    private float socre;
+
+    public float getSocre() {
+        return socre;
+    }
+
+    public void setSocre(float socre) {
+        this.socre = socre;
+    }
+
+    public Integer getViewNum() {
+        return viewNum;
+    }
+
+    public void setViewNum(Integer viewNum) {
+        this.viewNum = viewNum;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
 
     public boolean isCollectFlag() {
         return isCollectFlag;

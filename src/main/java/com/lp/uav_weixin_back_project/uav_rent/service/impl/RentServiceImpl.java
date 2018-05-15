@@ -4,6 +4,7 @@ import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectRentVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentProductDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentRecordNumDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo;
 import com.lp.uav_weixin_back_project.uav_rent.service.RentService;
@@ -156,6 +157,29 @@ public class RentServiceImpl implements RentService {
             }
         }
         return rentProductSimpleVo;
+    }
+
+    @Override
+    public Integer recordRentNum(RentRecordNumDto recordNumDto) throws Exception{
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",recordNumDto.getId());
+        map.put("userId",recordNumDto.getUserId());
+
+        // 记录商品浏览量
+        int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.recordRentNum", map);
+
+        // 记录用户浏览商品类别数
+        if (recordNumDto.getType()!=null && !recordNumDto.getType().equals("")){
+            if (recordNumDto.getType()==0){
+                // 消费级
+                baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum",map);
+            } else if (recordNumDto.getType()==1){
+                // 专业级
+                baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum",map);
+            }
+        }
+
+        return count;
     }
 
 

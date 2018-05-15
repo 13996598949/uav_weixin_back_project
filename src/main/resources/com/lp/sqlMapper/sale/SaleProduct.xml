@@ -9,7 +9,8 @@
         a.sale_product_describe AS saleProductDescribe,
         a.sale_product_price AS saleProductPrice,
         a.sale_product_picture AS saleProductPicture,
-        b.credit as credit
+        b.credit as credit,
+        a.type AS type
         FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.create_time desc
     </select>
 
@@ -154,5 +155,11 @@
         update sale_product
         set flag = 1
         where id=#{saleProductId}
+    </update>
+
+    <update id="recordSaleNum" parameterType="java.util.Map">
+        update sale_product
+        set view_num = view_num+1
+        where id=#{productId}
     </update>
 </mapper>

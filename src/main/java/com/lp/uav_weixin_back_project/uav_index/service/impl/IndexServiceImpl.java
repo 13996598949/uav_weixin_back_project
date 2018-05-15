@@ -5,6 +5,7 @@ import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectRentVo;
 import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectSaleVo;
 import com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo;
 import com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo;
+import com.lp.uav_weixin_back_project.uav_index.model.vo.TypeVo;
 import com.lp.uav_weixin_back_project.uav_index.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,169 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public List<RentProductVo> getRentInfo(Integer userId) {
         List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRentInfo",null);
+        getCollectRent(userId, rentProductVoList);
+
+        return rentProductVoList;
+    }
+
+    @Override
+    public List<SaleProductVo> getSaleInfo(Integer userId) {
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getSaleInfo",null);
+        getCollectSale(userId, saleProductVoList);
+        return saleProductVoList;
+    }
+
+    @Override
+    public List<RentProductVo> getRecommendRent(Integer userId) {
+        List<RentProductVo> recommendVos;
+        if (userId!=null && userId!=0) {
+            // 用户已登录  根据喜好推荐
+
+            // 获取该用户偏好的商品类型
+            TypeVo typeVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserLikeType", userId);
+            int likeType = 0;
+            if (typeVo != null) {
+                if (typeVo.getConsumer() >= typeVo.getProfessional()) {
+                    likeType = 0;
+                } else {
+                    likeType = 1;
+                }
+            }
+
+            // 获取用户偏好的商品类型的各商品浏览量和发布时间  过滤自己发布的商品
+            Map<String, Object> map = new HashMap<>();
+            map.put("type", likeType);
+            map.put("userId", userId);
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRecommendRentVo", map);
+            if (recommendVos != null && recommendVos.size() > 0) {
+                Date currentTime = new Date();
+                for (RentProductVo vo : recommendVos){
+                    // 计算每个商品的得分
+                    float sorce = vo.getViewNum()/(currentTime.getTime()-vo.getCreateTime().getTime());
+                    vo.setSocre(sorce);
+                }
+            }
+            // 根据得分对商品ID进行排序
+            Collections.sort(recommendVos, new Comparator<RentProductVo>() {
+                @Override
+                public int compare(RentProductVo o1, RentProductVo o2) {
+                    if (o1.getSocre() < o2.getSocre()){
+                        return 1;
+                    }
+                    if (o1.getSocre() == o2.getSocre()){
+                        return 0;
+                    }
+                    return -1;
+                }
+            });
+
+        }else {
+            // 用户未登录  按浏览量推荐
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRentByViewNum",null);
+        }
+
+        getCollectRent(userId, recommendVos);
+        return recommendVos;
+
+    }
+
+    @Override
+    public List<SaleProductVo> getRecommendSale(Integer userId) {
+        List<SaleProductVo> recommendVos;
+        if (userId!=null && userId!=0) {
+            // 用户已登录  根据喜好推荐
+
+            // 获取该用户偏好的商品类型
+            TypeVo typeVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserLikeType", userId);
+            int likeType = 0;
+            if (typeVo != null) {
+                if (typeVo.getConsumer() >= typeVo.getProfessional()) {
+                    likeType = 0;
+                } else {
+                    likeType = 1;
+                }
+            }
+
+            // 获取用户偏好的商品类型的各商品浏览量和发布时间  过滤自己发布的商品
+            Map<String, Object> map = new HashMap<>();
+            map.put("type", likeType);
+            map.put("userId", userId);
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRecommendSaleVo", map);
+            if (recommendVos != null && recommendVos.size() > 0) {
+                Date currentTime = new Date();
+                for (SaleProductVo vo : recommendVos){
+                    // 计算每个商品的得分
+                    long date = (currentTime.getTime()-vo.getCreateTime().getTime())/1000;
+                    float sorce = ((vo.getViewNum()*10000)/date);
+                    vo.setSocre(sorce);
+                }
+            }
+            // 根据得分对商品ID进行排序
+            Collections.sort(recommendVos, new Comparator<SaleProductVo>() {
+                @Override
+                public int compare(SaleProductVo o1, SaleProductVo o2) {
+                    if (o1.getSocre() < o2.getSocre()){
+                        return 1;
+                    }
+                    if (o1.getSocre() == o2.getSocre()){
+                        return 0;
+                    }
+                    return -1;
+                }
+            });
+        }else {
+            // 用户未登录  按浏览量推荐
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getSaleByViewNum",null);
+        }
+
+        getCollectSale(userId, recommendVos);
+
+        return recommendVos;
+    }
+
+    @Override
+    public List<RentProductVo> getNewRent(Integer userId) {
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewRent",null);
+        getCollectRent(userId, rentProductVoList);
+        return rentProductVoList;
+    }
+
+    @Override
+    public List<SaleProductVo> getNewSale(Integer userId) {
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewSale",null);
+        getCollectSale(userId, saleProductVoList);
+        return saleProductVoList;
+    }
+
+    @Override
+    public List<RentProductVo> getConsumerRent(Integer userId) {
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerRent",null);
+        getCollectRent(userId, rentProductVoList);
+        return rentProductVoList;
+    }
+
+    @Override
+    public List<SaleProductVo> getConsumerSale(Integer userId) {
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerSale",null);
+        getCollectSale(userId, saleProductVoList);
+        return saleProductVoList;
+    }
+
+    @Override
+    public List<RentProductVo> getProfessionalRent(Integer userId) {
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalRent",null);
+        getCollectRent(userId, rentProductVoList);
+        return rentProductVoList;
+    }
+
+    @Override
+    public List<SaleProductVo> getProfessionalSale(Integer userId) {
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalSale",null);
+        getCollectSale(userId, saleProductVoList);
+        return saleProductVoList;
+    }
+
+    private void getCollectRent(Integer userId, List<RentProductVo> rentProductVoList) {
         if (userId!=null && userId!=0){
             List<CollectRentVo> collectRentVos = baseDao.getList("com.lp.sqlMapper.collect.CollectRent.getCollectRent",userId);
             if (collectRentVos!=null && collectRentVos.size()>0){
@@ -34,13 +198,9 @@ public class IndexServiceImpl implements IndexService {
                 }
             }
         }
-
-        return rentProductVoList;
     }
 
-    @Override
-    public List<SaleProductVo> getSaleInfo(Integer userId) {
-        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getSaleInfo",null);
+    private void getCollectSale(Integer userId, List<SaleProductVo> saleProductVoList) {
         if (userId!=null && userId!=0){
             List<CollectSaleVo> collectSaleVos = baseDao.getList("com.lp.sqlMapper.collect.CollectSale.getCollectSale",userId);
             if (collectSaleVos!=null && collectSaleVos.size()>0){
@@ -55,6 +215,5 @@ public class IndexServiceImpl implements IndexService {
                 }
             }
         }
-        return saleProductVoList;
     }
 }

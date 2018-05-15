@@ -39,10 +39,18 @@
       a.type AS type,
       a.view_num AS viewNum,
       a.create_time AS createTime
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.type=#{type} AND a.user_id!=#{userId} AND a.flag=0
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+      <where>
+        a.type=#{type}
+        AND a.user_id!=#{userId}
+        AND a.flag=0
+        <if test="searchName!=null and searchName!=''">
+          AND a.rent_product_name LIKE '%${searchName}%'
+        </if>
+      </where>
   </select>
 
-  <select id="getRentByViewNum" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
+  <select id="getRentByViewNum" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
     SELECT
       a.id AS id,
       b.id AS userId,
@@ -52,7 +60,14 @@
       a.rent_product_picture AS rentProductPicture,
       b.credit as credit,
       a.type AS type
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.view_num desc
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+      <where>
+        a.flag=0
+        <if test="searchName!=null and searchName!=''">
+          AND a.rent_product_name LIKE '%${searchName}%'
+        </if>
+      </where>
+      order by a.view_num desc
   </select>
 
   <select id="getRecommendSaleVo" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
@@ -67,10 +82,18 @@
     a.type AS type,
     a.view_num AS viewNum,
     a.create_time AS createTime
-    FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.type=#{type} AND a.user_id!=#{userId} AND a.flag=0
+    FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+      a.type=#{type}
+      AND a.user_id!=#{userId}
+      AND a.flag=0
+      <if test="searchName!=null and searchName!=''">
+        AND a.sale_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
   </select>
 
-  <select id="getSaleByViewNum" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
+  <select id="getSaleByViewNum" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
     SELECT
     a.id AS id,
     b.id AS userId,
@@ -80,10 +103,17 @@
     a.sale_product_picture AS saleProductPicture,
     b.credit as credit,
     a.type AS type
-    FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.view_num desc
+    FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+      a.flag=0
+      <if test="searchName!=null and searchName!=''">
+        AND a.sale_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
+    order by a.view_num desc
   </select>
 
-  <select id="getNewRent" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
+  <select id="getNewRent" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
     SELECT
       a.id AS id,
       b.id AS userId,
@@ -93,10 +123,17 @@
       a.rent_product_picture AS rentProductPicture,
       b.credit as credit,
       a.type AS type
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.create_time desc
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+      <where>
+        a.flag=0
+        <if test="searchName!=null and searchName!=''">
+          AND a.rent_product_name LIKE '%${searchName}%'
+        </if>
+      </where>
+    order by a.create_time desc
   </select>
 
-  <select id="getNewSale" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
+  <select id="getNewSale" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
     SELECT
       a.id AS id,
       b.id AS userId,
@@ -106,10 +143,17 @@
       a.sale_product_picture AS saleProductPicture,
       b.credit as credit,
       a.type AS type
-      FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.create_time desc
+      FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+      <where>
+        a.flag=0
+        <if test="searchName!=null and searchName!=''">
+          AND a.sale_product_name LIKE '%${searchName}%'
+        </if>
+      </where>
+    order by a.create_time desc
   </select>
 
-  <select id="getConsumerRent" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
+  <select id="getConsumerRent" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
     SELECT
     a.id AS id,
     b.id AS userId,
@@ -119,10 +163,18 @@
     a.rent_product_picture AS rentProductPicture,
     b.credit as credit,
     a.type AS type
-    FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 AND a.type=0 order by a.view_num desc
+    FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+      a.flag=0
+      AND a.type=0
+      <if test="searchName!=null and searchName!=''">
+        AND a.rent_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
+    order by a.view_num desc
   </select>
 
-  <select id="getConsumerSale" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
+  <select id="getConsumerSale" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
     SELECT
     a.id AS id,
     b.id AS userId,
@@ -132,10 +184,18 @@
     a.sale_product_picture AS saleProductPicture,
     b.credit as credit,
     a.type AS type
-    FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 AND a.type=0 order by a.view_num desc
+    FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+       a.flag=0
+       AND a.type=0
+      <if test="searchName!=null and searchName!=''">
+        AND a.sale_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
+    order by a.view_num desc
   </select>
 
-  <select id="getProfessionalRent" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
+  <select id="getProfessionalRent" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.RentProductVo">
     SELECT
     a.id AS id,
     b.id AS userId,
@@ -145,10 +205,18 @@
     a.rent_product_picture AS rentProductPicture,
     b.credit as credit,
     a.type AS type
-    FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 AND a.type=1 order by a.view_num desc
+    FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+       a.flag=0
+       AND a.type=1
+      <if test="searchName!=null and searchName!=''">
+        AND a.rent_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
+    order by a.view_num desc
   </select>
 
-  <select id="getProfessionalSale" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
+  <select id="getProfessionalSale" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_index.model.vo.SaleProductVo">
     SELECT
     a.id AS id,
     b.id AS userId,
@@ -158,7 +226,15 @@
     a.sale_product_picture AS saleProductPicture,
     b.credit as credit,
     a.type AS type
-    FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 AND a.type=1 order by a.view_num desc
+    FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+    <where>
+      a.flag=0
+      AND a.type=1
+      <if test="searchName!=null and searchName!=''">
+        AND a.sale_product_name LIKE '%${searchName}%'
+      </if>
+    </where>
+    order by a.view_num desc
   </select>
 
 

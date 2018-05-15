@@ -11,19 +11,19 @@ public interface IndexService {
 
     List<SaleProductVo> getSaleInfo(Integer userId);
 
-    List<RentProductVo> getRecommendRent(Integer userId);
+    List<RentProductVo> getRecommendRent(Integer userId, String searchName);
 
-    List<SaleProductVo> getRecommendSale(Integer userId);
+    List<SaleProductVo> getRecommendSale(Integer userId, String searchName);
 
-    List<RentProductVo> getNewRent(Integer userId);
+    List<RentProductVo> getNewRent(Integer userId, String searchName);
 
-    List<SaleProductVo> getNewSale(Integer userId);
+    List<SaleProductVo> getNewSale(Integer userId, String searchName);
 
-    List<RentProductVo> getConsumerRent(Integer userId);
+    List<RentProductVo> getConsumerRent(Integer userId, String searchName);
 
-    List<SaleProductVo> getConsumerSale(Integer userId);
+    List<SaleProductVo> getConsumerSale(Integer userId, String searchName);
 
-    List<RentProductVo> getProfessionalRent(Integer userId);
+    List<RentProductVo> getProfessionalRent(Integer userId, String searchName);
 
-    List<SaleProductVo> getProfessionalSale(Integer userId);
+    List<SaleProductVo> getProfessionalSale(Integer userId, String searchName);
 }

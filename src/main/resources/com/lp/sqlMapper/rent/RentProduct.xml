@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lp.sqlMapper.rent.RentProduct">
-  <select id="getRentAllInfo" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo">
+  <select id="getRentAllInfo" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo">
     SELECT
       a.id AS id,
       b.id AS userId,
@@ -11,7 +11,14 @@
       a.rent_product_picture AS rentProductPicture,
       b.credit as credit,
       a.type AS type
-      FROM rent_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 ORDER BY a.create_time desc
+      FROM rent_product a LEFT JOIN user b on a.user_id = b.id
+      <where>
+      a.flag=0
+      <if test="rentName!=null and rentName!=''">
+        AND  a.rent_product_name LIKE '%${rentName}%'
+      </if>
+      </where>
+      ORDER BY a.create_time desc
   </select>
 
   <insert id="insertRentInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">

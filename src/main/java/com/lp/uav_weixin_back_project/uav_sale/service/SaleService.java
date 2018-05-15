@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SaleService {
 
-    List<SaleProductVo> getSaleAllInfo(Integer userId);
+    List<SaleProductVo> getSaleAllInfo(Integer userId, String saleName);
 
     // 发布出售信息
     int insertSaleInfo(Integer userId, SaleProductDto saleProductDto) throws MyError;

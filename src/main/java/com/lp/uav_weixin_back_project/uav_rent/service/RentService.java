@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface RentService {
 
-    List<RentProductVo> getRentAllInfo(Integer userId);
+    List<RentProductVo> getRentAllInfo(Integer userId,String rentName);
 
     // 发布租赁信息
     int insertRentInfo(Integer userId, RentProductDto rentProductDto) throws MyError;

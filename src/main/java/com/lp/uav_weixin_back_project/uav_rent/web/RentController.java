@@ -21,8 +21,8 @@ public class RentController {
     private RentService rentService;
 
     @GetMapping("getRentAllInfo/{userId}")
-    public ResultEntity<List<RentProductVo>> getRentAllInfo(@PathVariable Integer userId) throws Exception {
-        List<RentProductVo> rentProductVoList = rentService.getRentAllInfo(userId);
+    public ResultEntity<List<RentProductVo>> getRentAllInfo(@PathVariable Integer userId,String rentName) throws Exception {
+        List<RentProductVo> rentProductVoList = rentService.getRentAllInfo(userId,rentName);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }

@@ -27,8 +27,13 @@ public class RentServiceImpl implements RentService {
     private BaseDao baseDao;
 
     @Override
-    public List<RentProductVo> getRentAllInfo(Integer userId) {
-        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getRentAllInfo",null);
+    public List<RentProductVo> getRentAllInfo(Integer userId,String rentName) {
+        if (rentName!=null && !rentName.equals("")){
+            rentName = rentName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("rentName",rentName);
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getRentAllInfo",map);
         if (userId!=null && userId!=0){
             List<CollectRentVo> collectRentVos = baseDao.getList("com.lp.sqlMapper.collect.CollectRent.getCollectRent",userId);
             if (collectRentVos!=null && collectRentVos.size()>0){

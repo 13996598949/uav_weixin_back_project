@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lp.sqlMapper.sale.SaleProduct">
-    <select id="getSaleAllInfo" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo">
+    <select id="getSaleAllInfo" parameterType="java.util.Map" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo">
         SELECT
         a.id AS id,
         b.id AS userId,
@@ -11,7 +11,14 @@
         a.sale_product_picture AS saleProductPicture,
         b.credit as credit,
         a.type AS type
-        FROM sale_product a LEFT JOIN user b on a.user_id = b.id WHERE a.flag=0 order by a.create_time desc
+        FROM sale_product a LEFT JOIN user b on a.user_id = b.id
+        <where>
+            a.flag=0
+            <if test="saleName!=null and saleName!=''">
+                AND  a.sale_product_name LIKE '%${saleName}%'
+            </if>
+        </where>
+        order by a.create_time desc
     </select>
 
     <insert id="insertSaleInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">

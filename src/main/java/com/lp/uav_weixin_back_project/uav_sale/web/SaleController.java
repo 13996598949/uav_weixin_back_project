@@ -23,8 +23,8 @@ public class SaleController {
     private SaleService saleService;
 
     @GetMapping("getSaleAllInfo/{userId}")
-    public ResultEntity<List<SaleProductVo>> getRentAllInfo(@PathVariable Integer userId) throws Exception {
-        List<SaleProductVo> saleProductVoList = saleService.getSaleAllInfo(userId);
+    public ResultEntity<List<SaleProductVo>> getRentAllInfo(@PathVariable Integer userId,String saleName) throws Exception {
+        List<SaleProductVo> saleProductVoList = saleService.getSaleAllInfo(userId,saleName);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }

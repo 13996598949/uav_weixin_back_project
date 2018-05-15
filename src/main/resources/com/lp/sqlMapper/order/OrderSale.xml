@@ -12,10 +12,23 @@
     b.active AS active
     FROM sale_product a
     LEFT JOIN order_sale b ON a.id = b.sale_product_id
-    WHERE b.sell_id = #{userId} AND a.flag=1
+    WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look=0
   </select>
 
-  <delete id="deleteSaleOrder" parameterType="java.lang.Integer">
+  <update id="deleteSaleOrder" parameterType="java.util.Map">
+    UPDATE order_sale
+    <set>
+      <if test="flag=='buy'">
+        buy_look=1
+      </if>
+      <if test="flag=='sale'">
+        sale_look=1
+      </if>
+    </set>
+    WHERE id=#{orderId}
+  </update>
+
+  <delete id="closeSaleOrder" parameterType="java.lang.Integer">
     DELETE FROM order_sale WHERE id=#{orderId}
   </delete>
 
@@ -86,7 +99,7 @@
     b.active AS active
     FROM sale_product a
     LEFT JOIN order_sale b ON a.id = b.sale_product_id
-    WHERE b.buy_id = #{userId} AND a.flag=1
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0
   </select>
 
   <select id="getSaleOrderInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo">
@@ -241,12 +254,12 @@
     SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 1
   </select>
 
-  <select id="countReviceSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="countConfirmSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 2
   </select>
 
-  <select id="countConfirmSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 3
+  <select id="countEvaluateSale" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT count(*) FROM order_sale WHERE buy_id=#{userId} AND active = 3 AND buy_look = 0
   </select>
 
   <select id="getPayingSaleList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
@@ -302,7 +315,7 @@
     b.active AS active
     FROM sale_product a
     LEFT JOIN order_sale b ON a.id = b.sale_product_id
-    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=3
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=3 and b.buy_look=0
   </select>
 
 </mapper>

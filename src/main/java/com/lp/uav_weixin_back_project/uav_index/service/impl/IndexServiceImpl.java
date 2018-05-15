@@ -34,7 +34,10 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public List<RentProductVo> getRecommendRent(Integer userId) {
+    public List<RentProductVo> getRecommendRent(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
         List<RentProductVo> recommendVos;
         if (userId!=null && userId!=0) {
             // 用户已登录  根据喜好推荐
@@ -54,6 +57,7 @@ public class IndexServiceImpl implements IndexService {
             Map<String, Object> map = new HashMap<>();
             map.put("type", likeType);
             map.put("userId", userId);
+            map.put("searchName",searchName);
             recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRecommendRentVo", map);
             if (recommendVos != null && recommendVos.size() > 0) {
                 Date currentTime = new Date();
@@ -78,8 +82,10 @@ public class IndexServiceImpl implements IndexService {
             });
 
         }else {
+            Map<String,Object> map = new HashMap<>();
+            map.put("searchName",searchName);
             // 用户未登录  按浏览量推荐
-            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRentByViewNum",null);
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRentByViewNum",map);
         }
 
         getCollectRent(userId, recommendVos);
@@ -88,7 +94,10 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public List<SaleProductVo> getRecommendSale(Integer userId) {
+    public List<SaleProductVo> getRecommendSale(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
         List<SaleProductVo> recommendVos;
         if (userId!=null && userId!=0) {
             // 用户已登录  根据喜好推荐
@@ -108,6 +117,7 @@ public class IndexServiceImpl implements IndexService {
             Map<String, Object> map = new HashMap<>();
             map.put("type", likeType);
             map.put("userId", userId);
+            map.put("searchName",searchName);
             recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getRecommendSaleVo", map);
             if (recommendVos != null && recommendVos.size() > 0) {
                 Date currentTime = new Date();
@@ -132,8 +142,10 @@ public class IndexServiceImpl implements IndexService {
                 }
             });
         }else {
+            Map<String,Object> map = new HashMap<>();
+            map.put("searchName",searchName);
             // 用户未登录  按浏览量推荐
-            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getSaleByViewNum",null);
+            recommendVos = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getSaleByViewNum",map);
         }
 
         getCollectSale(userId, recommendVos);
@@ -142,43 +154,73 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public List<RentProductVo> getNewRent(Integer userId) {
-        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewRent",null);
+    public List<RentProductVo> getNewRent(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewRent",map);
         getCollectRent(userId, rentProductVoList);
         return rentProductVoList;
     }
 
     @Override
-    public List<SaleProductVo> getNewSale(Integer userId) {
-        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewSale",null);
+    public List<SaleProductVo> getNewSale(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getNewSale",map);
         getCollectSale(userId, saleProductVoList);
         return saleProductVoList;
     }
 
     @Override
-    public List<RentProductVo> getConsumerRent(Integer userId) {
-        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerRent",null);
+    public List<RentProductVo> getConsumerRent(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerRent",map);
         getCollectRent(userId, rentProductVoList);
         return rentProductVoList;
     }
 
     @Override
-    public List<SaleProductVo> getConsumerSale(Integer userId) {
-        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerSale",null);
+    public List<SaleProductVo> getConsumerSale(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getConsumerSale",map);
         getCollectSale(userId, saleProductVoList);
         return saleProductVoList;
     }
 
     @Override
-    public List<RentProductVo> getProfessionalRent(Integer userId) {
-        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalRent",null);
+    public List<RentProductVo> getProfessionalRent(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<RentProductVo> rentProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalRent",map);
         getCollectRent(userId, rentProductVoList);
         return rentProductVoList;
     }
 
     @Override
-    public List<SaleProductVo> getProfessionalSale(Integer userId) {
-        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalSale",null);
+    public List<SaleProductVo> getProfessionalSale(Integer userId, String searchName) {
+        if (searchName!=null && !searchName.equals("")){
+            searchName = searchName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("searchName",searchName);
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.index.RentProduct.getProfessionalSale",map);
         getCollectSale(userId, saleProductVoList);
         return saleProductVoList;
     }

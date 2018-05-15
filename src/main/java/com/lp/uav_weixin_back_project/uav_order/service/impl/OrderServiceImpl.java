@@ -36,15 +36,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteRentOrder(Integer orderId) {
-        int count = baseDao.delete("com.lp.sqlMapper.order.OrderRent.deleteRentOrder",orderId);
+    public int deleteRentOrder(Integer orderId, String flag) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("flag",flag);
+        int count = baseDao.update("com.lp.sqlMapper.order.OrderRent.deleteRentOrder",map);
         return count;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteSaleOrder(Integer orderId) {
-        int count = baseDao.delete("com.lp.sqlMapper.order.OrderSale.deleteSaleOrder",orderId);
+    public int deleteSaleOrder(Integer orderId, String flag) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("flag",flag);
+        int count = baseDao.update("com.lp.sqlMapper.order.OrderSale.deleteSaleOrder",map);
         return count;
     }
 
@@ -157,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int closeRentOrder(Integer orderId, Integer productId) {
-        int count = baseDao.delete("com.lp.sqlMapper.order.OrderRent.deleteRentOrder",orderId);
+        int count = baseDao.delete("com.lp.sqlMapper.order.OrderRent.closeRentOrder",orderId);
         baseDao.update("com.lp.sqlMapper.order.OrderRent.updateProductFlag",productId);
         return count;
     }
@@ -165,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int closeSaleOrder(Integer orderId, Integer productId) {
-        int count = baseDao.delete("com.lp.sqlMapper.order.OrderSale.deleteSaleOrder",orderId);
+        int count = baseDao.delete("com.lp.sqlMapper.order.OrderSale.closeSaleOrder",orderId);
         baseDao.update("com.lp.sqlMapper.order.OrderSale.updateProductFlag",productId);
         return count;
     }
@@ -344,14 +350,14 @@ public class OrderServiceImpl implements OrderService {
         countOrderVo.setDeliveryNum(deliveryNumRent+deliveryNumSale);
 
         // 统计待收货的订单
-        int reviceNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countReviceRent",userId);
-        int reviceNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countReviceSale",userId);
-        countOrderVo.setReciveNum(reviceNumRent+reviceNumSale);
-
-        // 统计待评价的订单
         int confirmNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countConfirmRent",userId);
         int confirmNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countConfirmSale",userId);
         countOrderVo.setConfirmNum(confirmNumRent+confirmNumSale);
+
+        // 统计待评价的订单
+        int evaluateNumRent = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderRent.countEvaluateRent",userId);
+        int evaluateNumSale = baseDao.getOneBySqlId("com.lp.sqlMapper.order.OrderSale.countEvaluateSale",userId);
+        countOrderVo.setEvaluateNum(evaluateNumRent+evaluateNumSale);
 
         return countOrderVo;
     }

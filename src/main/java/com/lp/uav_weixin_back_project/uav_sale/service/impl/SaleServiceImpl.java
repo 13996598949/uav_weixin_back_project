@@ -27,8 +27,13 @@ public class SaleServiceImpl implements SaleService {
     private BaseDao baseDao;
 
     @Override
-    public List<SaleProductVo> getSaleAllInfo(Integer userId) {
-        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getSaleAllInfo",null);
+    public List<SaleProductVo> getSaleAllInfo(Integer userId, String saleName) {
+        if (saleName!=null && !saleName.equals("")){
+            saleName = saleName.replaceAll("'","");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("saleName",saleName);
+        List<SaleProductVo> saleProductVoList = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getSaleAllInfo",map);
         if (userId!=null && userId!=0){
             List<CollectSaleVo> collectSaleVos = baseDao.getList("com.lp.sqlMapper.collect.CollectSale.getCollectSale",userId);
             if (collectSaleVos!=null && collectSaleVos.size()>0){

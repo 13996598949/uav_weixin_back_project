@@ -5,9 +5,9 @@ public class CountOrderVo {
 
     private Integer deliveryNum;
 
-    private Integer reciveNum;
-
     private Integer confirmNum;
+
+    private Integer evaluateNum;
 
     public Integer getPayNum() {
         return payNum;
@@ -25,12 +25,12 @@ public class CountOrderVo {
         this.deliveryNum = deliveryNum;
     }
 
-    public Integer getReciveNum() {
-        return reciveNum;
+    public Integer getEvaluateNum() {
+        return evaluateNum;
     }
 
-    public void setReciveNum(Integer reciveNum) {
-        this.reciveNum = reciveNum;
+    public void setEvaluateNum(Integer evaluateNum) {
+        this.evaluateNum = evaluateNum;
     }
 
     public Integer getConfirmNum() {

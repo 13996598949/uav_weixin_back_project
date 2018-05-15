@@ -15,9 +15,9 @@ public interface OrderService {
 
     List<MySellInfoVo> getMySellSaleInfo(Integer userId);
 
-    int deleteRentOrder(Integer orderId);
+    int deleteRentOrder(Integer orderId, String flag);
 
-    int deleteSaleOrder(Integer orderId);
+    int deleteSaleOrder(Integer orderId, String flag);
 
     OrderInfoVo insertSaleOrder(InsertOrderDto dto) throws MyError;
 

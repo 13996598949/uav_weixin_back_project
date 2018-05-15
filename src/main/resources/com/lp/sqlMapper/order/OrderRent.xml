@@ -13,12 +13,26 @@
       b.rent_day AS rentDay
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
-      WHERE b.sell_id = #{userId} AND a.flag=1
+      WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look = 0
   </select>
 
-  <delete id="deleteRentOrder" parameterType="java.lang.Integer">
+  <update id="deleteRentOrder" parameterType="java.util.Map">
+    UPDATE order_rent
+     <set>
+       <if test="flag=='buy'">
+         buy_look=1
+       </if>
+       <if test="flag=='sale'">
+         sale_look=1
+       </if>
+     </set>
+     WHERE id=#{orderId}
+  </update>
+
+  <delete id="closeRentOrder" parameterType="java.lang.Integer">
     DELETE FROM order_rent WHERE id=#{orderId}
   </delete>
+
 
   <insert id="insertRentOrder" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="orderId">
     insert into order_rent
@@ -94,7 +108,7 @@
       b.rent_day AS rentDay
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
-      WHERE b.buy_id = #{userId} AND a.flag=1
+      WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0
   </select>
 
   <select id="getRentOrderInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo">
@@ -249,12 +263,12 @@
       SELECT count(*) FROM order_rent WHERE buy_id=#{userId} AND active = 1
   </select>
 
-  <select id="countReviceRent" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="countConfirmRent" parameterType="java.lang.Integer" resultType="java.lang.Integer">
       SELECT count(*) FROM order_rent WHERE buy_id=#{userId} AND active = 2
   </select>
 
-  <select id="countConfirmRent" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-      SELECT count(*) FROM order_rent WHERE buy_id=#{userId} AND active = 3
+  <select id="countEvaluateRent" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      SELECT count(*) FROM order_rent WHERE buy_id=#{userId} AND active = 3 AND buy_look = 0
   </select>
 
     <select id="getPayingRentList" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo">
@@ -314,7 +328,7 @@
       b.rent_day AS rentDay
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
-      WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=4
+      WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=3 AND b.buy_look=0
     </select>
 
 </mapper>

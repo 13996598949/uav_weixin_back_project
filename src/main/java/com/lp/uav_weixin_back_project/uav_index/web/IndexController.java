@@ -31,57 +31,57 @@ public class IndexController {
     }
 
     @GetMapping("getRecommendRent/{userId}")
-    public ResultEntity<List<RentProductVo>> getRecommendRent(@PathVariable Integer userId) throws Exception {
-        List<RentProductVo> rentProductVoList = indexService.getRecommendRent(userId);
+    public ResultEntity<List<RentProductVo>> getRecommendRent(@PathVariable Integer userId,String searchName) throws Exception {
+        List<RentProductVo> rentProductVoList = indexService.getRecommendRent(userId,searchName);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getRecommendSale/{userId}")
-    public ResultEntity<List<SaleProductVo>> getRecommendSale(@PathVariable Integer userId) throws Exception {
-        List<SaleProductVo> saleProductVoList = indexService.getRecommendSale(userId);
+    public ResultEntity<List<SaleProductVo>> getRecommendSale(@PathVariable Integer userId,String searchName) throws Exception {
+        List<SaleProductVo> saleProductVoList = indexService.getRecommendSale(userId,searchName);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getNewRent/{userId}")
-    public ResultEntity<List<RentProductVo>> getNewRent(@PathVariable Integer userId) throws Exception {
-        List<RentProductVo> rentProductVoList = indexService.getNewRent(userId);
+    public ResultEntity<List<RentProductVo>> getNewRent(@PathVariable Integer userId,String searchName) throws Exception {
+        List<RentProductVo> rentProductVoList = indexService.getNewRent(userId,searchName);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getNewSale/{userId}")
-    public ResultEntity<List<SaleProductVo>> getNewSale(@PathVariable Integer userId) throws Exception {
-        List<SaleProductVo> saleProductVoList = indexService.getNewSale(userId);
+    public ResultEntity<List<SaleProductVo>> getNewSale(@PathVariable Integer userId,String searchName) throws Exception {
+        List<SaleProductVo> saleProductVoList = indexService.getNewSale(userId,searchName);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getConsumerRent/{userId}")
-    public ResultEntity<List<RentProductVo>> getConsumerRent(@PathVariable Integer userId) throws Exception {
-        List<RentProductVo> rentProductVoList = indexService.getConsumerRent(userId);
+    public ResultEntity<List<RentProductVo>> getConsumerRent(@PathVariable Integer userId,String searchName) throws Exception {
+        List<RentProductVo> rentProductVoList = indexService.getConsumerRent(userId,searchName);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getConsumerSale/{userId}")
-    public ResultEntity<List<SaleProductVo>> getConsumerSale(@PathVariable Integer userId) throws Exception {
-        List<SaleProductVo> saleProductVoList = indexService.getConsumerSale(userId);
+    public ResultEntity<List<SaleProductVo>> getConsumerSale(@PathVariable Integer userId,String searchName) throws Exception {
+        List<SaleProductVo> saleProductVoList = indexService.getConsumerSale(userId,searchName);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getProfessionalRent/{userId}")
-    public ResultEntity<List<RentProductVo>> getProfessionalRent(@PathVariable Integer userId) throws Exception {
-        List<RentProductVo> rentProductVoList = indexService.getProfessionalRent(userId);
+    public ResultEntity<List<RentProductVo>> getProfessionalRent(@PathVariable Integer userId,String searchName) throws Exception {
+        List<RentProductVo> rentProductVoList = indexService.getProfessionalRent(userId,searchName);
         ResultEntity<List<RentProductVo>> resultEntity = new ResultEntity<>(rentProductVoList);
         return resultEntity;
     }
 
     @GetMapping("getProfessionalSale/{userId}")
-    public ResultEntity<List<SaleProductVo>> getProfessionalSale(@PathVariable Integer userId) throws Exception {
-        List<SaleProductVo> saleProductVoList = indexService.getProfessionalSale(userId);
+    public ResultEntity<List<SaleProductVo>> getProfessionalSale(@PathVariable Integer userId,String searchName) throws Exception {
+        List<SaleProductVo> saleProductVoList = indexService.getProfessionalSale(userId,searchName);
         ResultEntity<List<SaleProductVo>> resultEntity = new ResultEntity<>(saleProductVoList);
         return resultEntity;
     }

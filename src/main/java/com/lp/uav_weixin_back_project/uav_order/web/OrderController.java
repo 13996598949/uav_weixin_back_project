@@ -33,16 +33,16 @@ public class OrderController {
         return resultEntity;
     }
 
-    @DeleteMapping("deleteRentOrder/{orderId}")
-    public ResultEntity<Integer> deleteRentOrder(@PathVariable Integer orderId) throws Exception {
-        int count = orderService.deleteRentOrder(orderId);
+    @DeleteMapping("deleteRentOrder/{orderId}/{flag}")
+    public ResultEntity<Integer> deleteRentOrder(@PathVariable Integer orderId,@PathVariable String flag) throws Exception {
+        int count = orderService.deleteRentOrder(orderId,flag);
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }
 
-    @DeleteMapping("deleteSaleOrder/{orderId}")
-    public ResultEntity<Integer> deleteSaleOrder(@PathVariable Integer orderId) throws Exception {
-        int count = orderService.deleteSaleOrder(orderId);
+    @DeleteMapping("deleteSaleOrder/{orderId}/{flag}")
+    public ResultEntity<Integer> deleteSaleOrder(@PathVariable Integer orderId,@PathVariable String flag) throws Exception {
+        int count = orderService.deleteSaleOrder(orderId,flag);
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }

@@ -43,4 +43,8 @@ public interface UserService {
 
     // 删除收货地址
     int deleteAddress(int id);
+
+    Integer sendVerification(String telephone, String userName) throws MyError;
+
+    int resetPassword(ResetDto resetDto) throws MyError;
 }

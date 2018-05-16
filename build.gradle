@@ -34,6 +34,8 @@ dependencies {
 	compile('com.github.pagehelper:pagehelper-spring-boot-starter:0.1.0')
 	compile group: 'com.github.pagehelper', name: 'pagehelper', version: '5.0.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile 'commons-httpclient:commons-httpclient:3.1'
+	compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
 }
 
 mybatisGenerator {

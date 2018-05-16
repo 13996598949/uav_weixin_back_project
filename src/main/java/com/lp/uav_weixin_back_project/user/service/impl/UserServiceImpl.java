@@ -7,6 +7,12 @@ import com.lp.uav_weixin_back_project.user.model.vo.AddressCallbackListVo;
 import com.lp.uav_weixin_back_project.user.model.vo.AddressListVo;
 import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
 import com.lp.uav_weixin_back_project.user.service.UserService;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +38,12 @@ public class UserServiceImpl implements UserService {
         List<UserVo> userList = baseDao.getList("com.lp.sqlMapper.user.User.getUser",userDto);
         if (userList!=null && userList.size()>0) {
             throw new MyError("用户名已存在");
+        }
+
+        // 校验手机号是否存在
+        List<UserVo> userVos = baseDao.getList("com.lp.sqlMapper.user.User.getUserByTel",userDto);
+        if (userVos!=null && userVos.size()>0) {
+            throw new MyError("手机号已被注册");
         }
 
         Map<String, Object> map = new HashMap<>();
@@ -198,6 +210,80 @@ public class UserServiceImpl implements UserService {
     @Override
     public int deleteAddress(int id) {
         int count = baseDao.delete("com.lp.sqlMapper.user.User.deleteAddress",id);
+        return count;
+    }
+
+    private static String Url = "http://106.ihuyi.com/webservice/sms.php?method=Submit";
+    @Override
+    public Integer sendVerification(String telephone, String userName) throws MyError {
+
+        Map<String,Object> userMap = new HashMap<>();
+        userMap.put("userName",userName);
+        String userTelephone = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getTelephone",userName);
+        if (!userTelephone.equals(telephone)){
+            throw new MyError("手机号输入错误，手机号需为用户名注册时的手机号");
+        }
+
+        HttpClient client = new HttpClient();
+        PostMethod method = new PostMethod(Url);
+
+        client.getParams().setContentCharset("GBK");
+        method.setRequestHeader("ContentType","application/x-www-form-urlencoded;charset=GBK");
+
+        int mobile_code = (int)((Math.random()*9+1)*100000);
+
+        String content = new String("您的验证码是：" + mobile_code + "。请不要把验证码泄露给其他人。");
+
+        NameValuePair[] data = {//提交短信
+                new NameValuePair("account", "C19083842"), //查看用户名 登录用户中心->验证码通知短信>产品总览->API接口信息->APIID
+                new NameValuePair("password", "276965b7343fdeb4a833f9a7ca5c4477"), //查看密码 登录用户中心->验证码通知短信>产品总览->API接口信息->APIKEY
+                new NameValuePair("mobile", telephone),
+                new NameValuePair("content", content),
+        };
+        method.setRequestBody(data);
+
+        try {
+            client.executeMethod(method);
+
+            String SubmitResult =method.getResponseBodyAsString();
+
+            Document doc = DocumentHelper.parseText(SubmitResult);
+            Element root = doc.getRootElement();
+
+            String code = root.elementText("code");
+            String msg = root.elementText("msg");
+            String smsid = root.elementText("smsid");
+
+            System.out.println(code);
+            System.out.println(msg);
+            System.out.println(smsid);
+
+            if("2".equals(code)){
+                System.out.println("短信提交成功");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("telephone",telephone);
+        map.put("mobile_code",mobile_code);
+        int count = baseDao.update("com.lp.sqlMapper.user.User.updateVerification",map);
+
+        return count;
+    }
+
+    @Override
+    public int resetPassword(ResetDto resetDto) throws MyError {
+        String mobileCode = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getMobileCode",resetDto);
+        if (!mobileCode.equals(resetDto.getMobileCode())){
+            throw new MyError("验证码错误!");
+        }
+        int count = baseDao.update("com.lp.sqlMapper.user.User.resetPassword",resetDto);
+        if (count<=0){
+            throw new MyError("密码重置失败!");
+        }
         return count;
     }
 

@@ -34,6 +34,21 @@ public class UserController {
         return resultEntity;
     }
 
+    @PutMapping("resetPassword")
+    public ResultEntity<Integer> resetPassword(@RequestBody ResetDto resetDto) throws Exception {
+        int count = userService.resetPassword(resetDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    // 发送短信验证码
+    @PutMapping("sendVerification/{telephone}/{userName}")
+    public ResultEntity<Integer> sendVerification(@PathVariable String telephone,@PathVariable String userName) throws Exception {
+        Integer count = userService.sendVerification(telephone,userName);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
     @PutMapping("editPersonInfo")
     public ResultEntity<UserVo> editPersonInfo(@RequestBody UserEditBasicDto userEditBasicDto) throws Exception {
         UserVo userVo = userService.editPersonInfo(userEditBasicDto);

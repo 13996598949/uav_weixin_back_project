@@ -304,7 +304,7 @@ public class OrderServiceImpl implements OrderService {
             map.put("sale_evaluate_flag",1);
             baseDao.update("com.lp.sqlMapper.order.OrderSale.updateSaleActiveForEvaluate", map);
         }
-        OrderInfoVo orderInfoVo = this.getRentOrderInfo(evaluateDto.getOrderId());
+        OrderInfoVo orderInfoVo = this.getSaleOrderInfo(evaluateDto.getOrderId());
         return orderInfoVo;
     }
 

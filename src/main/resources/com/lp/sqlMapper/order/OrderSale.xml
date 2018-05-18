@@ -177,7 +177,7 @@
   </update>
 
   <insert id="toEvaluateSaleOrder" parameterType="java.util.Map">
-    insert into evaluate_rent
+    insert into evaluate_sale
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
         order_id,

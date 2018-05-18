@@ -3,8 +3,12 @@ package com.lp.uav_weixin_back_project.uav_rent.service.impl;
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectRentVo;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentMessageDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentProductDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentRecordNumDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentReplyDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.vo.MyMessageRentVo;
+import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentMessageVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo;
 import com.lp.uav_weixin_back_project.uav_rent.service.RentService;
@@ -173,17 +177,71 @@ public class RentServiceImpl implements RentService {
         // 记录商品浏览量
         int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.recordRentNum", map);
 
-        // 记录用户浏览商品类别数
-        if (recordNumDto.getType()!=null && !recordNumDto.getType().equals("")){
-            if (recordNumDto.getType()==0){
-                // 消费级
-                baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum",map);
-            } else if (recordNumDto.getType()==1){
-                // 专业级
-                baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum",map);
+        if (recordNumDto.getUserId()!=null && !recordNumDto.getUserId().equals("")) {
+            // 记录用户浏览商品类别数
+            if (recordNumDto.getType() != null && !recordNumDto.getType().equals("")) {
+                if (recordNumDto.getType() == 0) {
+                    // 消费级
+                    baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum", map);
+                } else if (recordNumDto.getType() == 1) {
+                    // 专业级
+                    baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum", map);
+                }
             }
         }
 
+        return count;
+    }
+
+    @Override
+    public int insertRentMessage(RentMessageDto rentMessageDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",rentMessageDto.getProductId());
+        map.put("personId",rentMessageDto.getPersonId());
+        map.put("message",rentMessageDto.getMessage());
+        map.put("createTime",new Date());
+
+        int count = baseDao.insert("com.lp.sqlMapper.rent.RentProduct.insertRentMessage",map);
+        if (count<=0){
+            throw new MyError("留言失败!");
+        }
+
+        return count;
+    }
+
+    @Override
+    public List<RentMessageVo> getRentMessage(Integer productId) {
+        List<RentMessageVo> rentMessage = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getRentMessage",productId);
+        if (rentMessage!=null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (RentMessageVo vo:rentMessage){
+                if (vo.getMessageTime()!=null){
+                    String messageTime = format.format(vo.getMessageTime());
+                    vo.setMessageTimeStr(messageTime);
+                }
+                if (vo.getReplyTime()!=null){
+                    String replyTime = format.format(vo.getReplyTime());
+                    vo.setReplyTimeStr(replyTime);
+                }
+            }
+        }
+        return rentMessage;
+    }
+
+    @Override
+    public List<MyMessageRentVo> getMyMessageRentInfo(Integer userId) {
+        List<MyMessageRentVo> myMessageRentVos = baseDao.getList("com.lp.sqlMapper.rent.RentProduct.getMyMessageRentInfo",userId);
+        return myMessageRentVos;
+    }
+
+    @Override
+    public int replyRentMessage(RentReplyDto rentReplyDto) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",rentReplyDto.getMessageId());
+        map.put("replyPersonId",rentReplyDto.getReplyPersonId());
+        map.put("replyMessage",rentReplyDto.getReplyMessage());
+        map.put("replyTime",new Date());
+        int count = baseDao.update("com.lp.sqlMapper.rent.RentProduct.replyRentMessage",map);
         return count;
     }
 

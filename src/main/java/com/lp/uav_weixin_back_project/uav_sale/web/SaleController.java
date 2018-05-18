@@ -1,8 +1,12 @@
 package com.lp.uav_weixin_back_project.uav_sale.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleMessageDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleRecordNumDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleReplyDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.MyMessageSaleVo;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleMessageVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
@@ -81,6 +85,34 @@ public class SaleController {
     @PutMapping("recordSaleNum")
     public ResultEntity<Integer> recordSaleNum(@RequestBody SaleRecordNumDto saleRecordNumDto) throws Exception {
         Integer count = saleService.recordSaleNum(saleRecordNumDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @PostMapping("insertSaleMessage")
+    public ResultEntity<Integer> insertSaleMessage(@RequestBody SaleMessageDto messageDto) throws Exception {
+        int count = saleService.insertSaleMessage(messageDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @GetMapping("getSaleMessage/{productId}")
+    public ResultEntity<List<SaleMessageVo>> getSaleMessage(@PathVariable Integer productId) throws Exception {
+        List<SaleMessageVo> saleMessage = saleService.getSaleMessage(productId);
+        ResultEntity<List<SaleMessageVo>> resultEntity = new ResultEntity<>(saleMessage);
+        return resultEntity;
+    }
+
+    @GetMapping("getMyMessageSaleInfo/{userId}")
+    public ResultEntity<List<MyMessageSaleVo>> getMyMessageSaleInfo(@PathVariable Integer userId) throws Exception {
+        List<MyMessageSaleVo> myMessageSaleVos = saleService.getMyMessageSaleInfo(userId);
+        ResultEntity<List<MyMessageSaleVo>> resultEntity = new ResultEntity<>(myMessageSaleVos);
+        return resultEntity;
+    }
+
+    @PutMapping("replySaleMessage")
+    public ResultEntity<Integer> replySaleMessage(@RequestBody SaleReplyDto saleReplyDto) throws Exception {
+        int count = saleService.replySaleMessage(saleReplyDto);
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }

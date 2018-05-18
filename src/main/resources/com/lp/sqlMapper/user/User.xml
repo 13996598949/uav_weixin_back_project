@@ -4,6 +4,9 @@
   <insert id="register" parameterType="java.util.Map">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="alias != null">
+        alias,
+      </if>
       <if test="personName != null">
         person_name,
       </if>
@@ -27,6 +30,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="alias != null">
+        #{alias},
+      </if>
       <if test="personName != null">
         #{personName},
       </if>

@@ -1,8 +1,12 @@
 package com.lp.uav_weixin_back_project.uav_rent.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentMessageDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentProductDto;
 import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentRecordNumDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.dto.RentReplyDto;
+import com.lp.uav_weixin_back_project.uav_rent.model.vo.MyMessageRentVo;
+import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentMessageVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_rent.model.vo.RentProductVo;
 import com.lp.uav_weixin_back_project.uav_rent.service.RentService;
@@ -79,6 +83,34 @@ public class RentController {
     @PutMapping("recordRentNum")
     public ResultEntity<Integer> recordRentNum(@RequestBody RentRecordNumDto recordNumDto) throws Exception {
         Integer count = rentService.recordRentNum(recordNumDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @PostMapping("insertRentMessage")
+    public ResultEntity<Integer> insertRentMessage(@RequestBody RentMessageDto messageDto) throws Exception {
+        int count = rentService.insertRentMessage(messageDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @GetMapping("getRentMessage/{productId}")
+    public ResultEntity<List<RentMessageVo>> getRentMessage(@PathVariable Integer productId) throws Exception {
+        List<RentMessageVo> rentMessage = rentService.getRentMessage(productId);
+        ResultEntity<List<RentMessageVo>> resultEntity = new ResultEntity<>(rentMessage);
+        return resultEntity;
+    }
+
+    @GetMapping("getMyMessageRentInfo/{userId}")
+    public ResultEntity<List<MyMessageRentVo>> getMyMessageRentInfo(@PathVariable Integer userId) throws Exception {
+        List<MyMessageRentVo> myMessageRentInfo = rentService.getMyMessageRentInfo(userId);
+        ResultEntity<List<MyMessageRentVo>> resultEntity = new ResultEntity<>(myMessageRentInfo);
+        return resultEntity;
+    }
+
+    @PutMapping("replyRentMessage")
+    public ResultEntity<Integer> replyRentMessage(@RequestBody RentReplyDto rentReplyDto) throws Exception {
+        int count = rentService.replyRentMessage(rentReplyDto);
         ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
         return resultEntity;
     }

@@ -3,8 +3,12 @@ package com.lp.uav_weixin_back_project.uav_sale.service.impl;
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_collect.model.vo.CollectSaleVo;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleMessageDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleProductDto;
 import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleRecordNumDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.dto.SaleReplyDto;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.MyMessageSaleVo;
+import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleMessageVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductDetailVo;
 import com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleProductVo;
 import com.lp.uav_weixin_back_project.uav_sale.service.SaleService;
@@ -173,17 +177,71 @@ public class SaleServiceImpl implements SaleService {
         // 记录商品浏览量
         int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.recordSaleNum", map);
 
-        // 记录用户浏览商品类别数
-        if (saleRecordNumDto.getType()!=null && !saleRecordNumDto.getType().equals("")){
-            if (saleRecordNumDto.getType()==0){
-                // 消费级
-                baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum",map);
-            } else if (saleRecordNumDto.getType()==1){
-                // 专业级
-                baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum",map);
+        if (saleRecordNumDto.getUserId()!=null && !saleRecordNumDto.getUserId().equals("")) {
+            // 记录用户浏览商品类别数
+            if (saleRecordNumDto.getType() != null && !saleRecordNumDto.getType().equals("")) {
+                if (saleRecordNumDto.getType() == 0) {
+                    // 消费级
+                    baseDao.update("com.lp.sqlMapper.user.User.recordConsumerNum", map);
+                } else if (saleRecordNumDto.getType() == 1) {
+                    // 专业级
+                    baseDao.update("com.lp.sqlMapper.user.User.recordProfessionalNum", map);
+                }
             }
         }
 
+        return count;
+    }
+
+    @Override
+    public int insertSaleMessage(SaleMessageDto messageDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("productId",messageDto.getProductId());
+        map.put("personId",messageDto.getPersonId());
+        map.put("message",messageDto.getMessage());
+        map.put("createTime",new Date());
+
+        int count = baseDao.insert("com.lp.sqlMapper.sale.SaleProduct.insertSaleMessage",map);
+        if (count<=0){
+            throw new MyError("留言失败!");
+        }
+
+        return count;
+    }
+
+    @Override
+    public List<SaleMessageVo> getSaleMessage(Integer productId) {
+        List<SaleMessageVo> saleMessage = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getSaleMessage",productId);
+        if (saleMessage!=null){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (SaleMessageVo vo:saleMessage){
+                if (vo.getMessageTime()!=null){
+                    String messageTime = format.format(vo.getMessageTime());
+                    vo.setMessageTimeStr(messageTime);
+                }
+                if (vo.getReplyTime()!=null){
+                    String replyTime = format.format(vo.getReplyTime());
+                    vo.setReplyTimeStr(replyTime);
+                }
+            }
+        }
+        return saleMessage;
+    }
+
+    @Override
+    public List<MyMessageSaleVo> getMyMessageSaleInfo(Integer userId) {
+        List<MyMessageSaleVo> myMessageSaleVos = baseDao.getList("com.lp.sqlMapper.sale.SaleProduct.getMyMessageSaleInfo",userId);
+        return myMessageSaleVos;
+    }
+
+    @Override
+    public int replySaleMessage(SaleReplyDto saleReplyDto) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",saleReplyDto.getMessageId());
+        map.put("replyPersonId",saleReplyDto.getReplyPersonId());
+        map.put("replyMessage",saleReplyDto.getReplyMessage());
+        map.put("replyTime",new Date());
+        int count = baseDao.update("com.lp.sqlMapper.sale.SaleProduct.replySaleMessage",map);
         return count;
     }
 

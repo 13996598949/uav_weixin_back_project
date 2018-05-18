@@ -15,7 +15,7 @@ public class UserEditBasicDto extends Model {
 
     private String header;
 
-    private Date birthday;
+    private String birthdayStr;
 
     private String sex;
 
@@ -47,12 +47,12 @@ public class UserEditBasicDto extends Model {
         this.header = header;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public String getBirthdayStr() {
+        return birthdayStr;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setBirthdayStr(String birthdayStr) {
+        this.birthdayStr = birthdayStr;
     }
 
     public String getSex() {

@@ -169,4 +169,86 @@
         set view_num = view_num+1
         where id=#{productId}
     </update>
+
+    <insert id="insertSaleMessage" parameterType="java.util.Map">
+        insert into leave_message_sale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="personId != null">
+                person_id,
+            </if>
+            <if test="message != null">
+                message,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                #{productId},
+            </if>
+            <if test="personId != null">
+                #{personId},
+            </if>
+            <if test="message != null">
+                #{message},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getSaleMessage" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.SaleMessageVo">
+        SELECT
+        b.alias AS personName,
+        b.header AS header,
+        a.message AS message,
+        a.create_time AS messageTime,
+        c.alias AS replyPersonName,
+        c.header AS replyHeader,
+        a.reply_message AS replyMessage,
+        a.reply_time AS replyTime
+        FROM leave_message_sale a
+        LEFT JOIN user b ON b.id=a.person_id
+        LEFT JOIN user c ON c.id=a.reply_person_id
+        WHERE product_id=#{productId} ORDER BY a.create_time DESC
+    </select>
+
+    <select id="getMyMessageSaleInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_sale.model.vo.MyMessageSaleVo">
+        SELECT
+        a.id AS messageId,
+        b.id AS productId,
+        b.sale_product_picture AS picture,
+        b.sale_product_name AS productName,
+        b.sale_product_describe AS productDescribe,
+        b.sale_product_price AS price,
+        c.alias AS personName,
+        c.header AS header,
+        a.message AS message
+        FROM leave_message_sale a
+        LEFT JOIN sale_product b ON b.id=a.product_id
+        LEFT JOIN user c ON c.id=a.person_id
+        WHERE b.user_id=#{userId} AND a.flag=0 ORDER BY a.create_time DESC
+    </select>
+
+    <update id="replySaleMessage" parameterType="java.util.Map">
+        update leave_message_sale
+        <set>
+            flag = 1,
+            <if test="replyPersonId != null">
+                reply_person_id=#{replyPersonId},
+            </if>
+            <if test="replyMessage != null">
+                reply_message=#{replyMessage},
+            </if>
+            <if test="replyTime != null">
+                reply_time=#{replyTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

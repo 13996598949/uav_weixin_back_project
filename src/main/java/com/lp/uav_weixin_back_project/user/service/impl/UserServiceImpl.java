@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         map.put("buyPassword", userDto.getBuyPassword());
         map.put("mail", userDto.getMail());
         map.put("telephone", userDto.getTelephone());
+        map.put("alias",userDto.getAlias());
         map.put("header","header/header.jpg");
         int count = baseDao.insert("com.lp.sqlMapper.user.User.register", map);
         return count;
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
         map.put("id",userEditBasicDto.getId());
         map.put("personName",userEditBasicDto.getPersonName());
         map.put("alias",userEditBasicDto.getAlias());
-        map.put("birthday",userEditBasicDto.getBirthday());
+        map.put("birthday",userEditBasicDto.getBirthdayStr());
         map.put("sex",userEditBasicDto.getSex());
         map.put("mail",userEditBasicDto.getMail());
         map.put("telephone",userEditBasicDto.getTelephone());
@@ -220,7 +221,7 @@ public class UserServiceImpl implements UserService {
         Map<String,Object> userMap = new HashMap<>();
         userMap.put("userName",userName);
         String userTelephone = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getTelephone",userName);
-        if (!userTelephone.equals(telephone)){
+        if (!userTelephone.equals(telephone)|| userTelephone.equals("")){
             throw new MyError("手机号输入错误，手机号需为用户名注册时的手机号");
         }
 

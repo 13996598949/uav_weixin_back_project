@@ -13,7 +13,7 @@
       b.rent_day AS rentDay
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
-      WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look = 0
+      WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look = 0 ORDER BY b.create_time DESC
   </select>
 
   <update id="deleteRentOrder" parameterType="java.util.Map">
@@ -108,7 +108,7 @@
       b.rent_day AS rentDay
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
-      WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0
+      WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0 ORDER BY b.create_time DESC
   </select>
 
   <select id="getRentOrderInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo">
@@ -134,7 +134,8 @@
       b.post_num AS postNum,
       b.refund_res AS refundRes,
       b.buy_evaluate_flag AS buy_evaluate_flag,
-      b.sale_evaluate_flag AS sale_evaluate_flag
+      b.sale_evaluate_flag AS sale_evaluate_flag,
+      a.deposit AS deposit
       FROM rent_product a
       LEFT JOIN order_rent b ON a.id = b.rent_product_id
       LEFT JOIN user c ON b.buy_id = c.id
@@ -331,4 +332,17 @@
       WHERE b.buy_id = #{userId} AND a.flag=1 AND b.active=3 AND b.buy_look=0
     </select>
 
+  <update id="toRefundDeposit" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.RefundDepositDto">
+    UPDATE order_rent
+    <set>
+      acitve = 6,
+      <if test="postCompany!=null">
+        deposit_post_company=#{postCompany},
+      </if>
+      <if test="postNum!=null">
+        deposit_post_num=#{postNum},
+      </if>
+    </set>
+    WHERE id=#{orderId}
+  </update>
 </mapper>

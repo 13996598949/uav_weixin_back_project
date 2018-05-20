@@ -47,4 +47,6 @@ public interface UserService {
     Integer sendVerification(String telephone, String userName) throws MyError;
 
     int resetPassword(ResetDto resetDto) throws MyError;
+
+    UserVo updateAccount(AccountDto accountDto) throws MyError;
 }

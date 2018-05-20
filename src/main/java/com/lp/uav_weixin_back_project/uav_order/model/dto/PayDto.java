@@ -8,6 +8,16 @@ public class PayDto {
 
     private String buyPassword;
 
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Integer getUserId() {
         return userId;
     }

@@ -288,6 +288,23 @@ public class UserServiceImpl implements UserService {
         return count;
     }
 
+    @Override
+    public UserVo updateAccount(AccountDto accountDto) throws MyError {
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",accountDto.getUserId());
+        String buyPassword = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getBuyPassword",map);
+        if (buyPassword.equals(accountDto.getBuyPassword())) {
+            map.put("account",accountDto.getAccount());
+            baseDao.update("com.lp.sqlMapper.user.User.updateAccount",map);
+            int id = accountDto.getUserId();
+            UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+            return userVo;
+
+        }else {
+            throw new MyError("交易密码输入错误，请重新输入！");
+        }
+    }
+
     /**
      * 保存图片文件到指定目录
      *

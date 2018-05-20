@@ -112,4 +112,10 @@ public class UserController {
         return resultEntity;
     }
 
+    @PutMapping("updateAccount")
+    public ResultEntity<UserVo> updateAccount(@RequestBody AccountDto accountDto) throws Exception {
+        UserVo userVo = userService.updateAccount(accountDto);
+        ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
+        return resultEntity;
+    }
 }

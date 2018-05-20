@@ -69,7 +69,8 @@
       birthday AS birthday,
       sex AS sex,
       mail AS mail,
-      telephone AS telephone
+      telephone AS telephone,
+      account AS account
     FROM user
     WHERE user_name=#{userName}
   </select>
@@ -87,7 +88,8 @@
       birthday AS birthday,
       sex AS sex,
       mail AS mail,
-      telephone AS telephone
+      telephone AS telephone,
+      account AS account
     FROM user
     WHERE user_name=#{userName} AND login_password=#{loginPassword}
   </select>
@@ -133,7 +135,8 @@
       birthday AS birthday,
       sex AS sex,
       mail AS mail,
-      telephone AS telephone
+      telephone AS telephone,
+      account AS account
     FROM user
     WHERE id=#{id}
   </select>
@@ -346,4 +349,26 @@
     </set>
     WHERE user_name=#{userName}
   </update>
+
+    <update id="updateAccount" parameterType="java.util.Map">
+        UPDATE user
+        <set>
+            <if test="account != null">
+                account = account+#{account}
+            </if>
+        </set>
+        WHERE id=#{userId}
+    </update>
+
+    <update id="deductAccount" parameterType="java.util.Map">
+      UPDATE user
+      set account = account-#{price}
+      WHERE id=#{userId}
+    </update>
+
+    <update id="refundMoney" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.ToRefundDto">
+        UPDATE user
+      set account = account+#{price}
+      WHERE id=#{userId}
+    </update>
 </mapper>

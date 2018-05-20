@@ -62,6 +62,7 @@ public class RentServiceImpl implements RentService {
         map.put("rentProductName",rentProductDto.getRentProductName());
         map.put("rentProductDescribe",rentProductDto.getRentProductDescribe());
         map.put("rentProductPrice",rentProductDto.getRentProductPrice());
+        map.put("deposit",rentProductDto.getDeposit());
         map.put("type",rentProductDto.getType());
         map.put("createTime",new Date());
         map.put("lastUpdateTime",new Date());
@@ -137,6 +138,7 @@ public class RentServiceImpl implements RentService {
         map.put("rentProductName",rentProductDto.getRentProductName());
         map.put("rentProductDescribe",rentProductDto.getRentProductDescribe());
         map.put("rentProductPrice",rentProductDto.getRentProductPrice());
+        map.put("deposit",rentProductDto.getDeposit());
         map.put("type",rentProductDto.getType());
         map.put("lastUpdateTime",new Date());
 

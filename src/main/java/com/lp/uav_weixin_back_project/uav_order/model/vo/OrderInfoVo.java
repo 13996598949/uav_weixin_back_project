@@ -1,5 +1,7 @@
 package com.lp.uav_weixin_back_project.uav_order.model.vo;
 
+import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
+
 import java.util.Date;
 
 public class OrderInfoVo {
@@ -52,6 +54,25 @@ public class OrderInfoVo {
 
     private Integer sale_evaluate_flag;
 
+    private Double deposit;
+
+    private UserVo userVo;
+
+    public UserVo getUserVo() {
+        return userVo;
+    }
+
+    public void setUserVo(UserVo userVo) {
+        this.userVo = userVo;
+    }
+
+    public Double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(Double deposit) {
+        this.deposit = deposit;
+    }
 
     public Integer getBuy_evaluate_flag() {
         return buy_evaluate_flag;

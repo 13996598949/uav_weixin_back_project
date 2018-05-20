@@ -2,11 +2,9 @@ package com.lp.uav_weixin_back_project.uav_order.web;
 
 import com.lp.uav_weixin_back_project.model.ResultEntity;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.*;
 import com.lp.uav_weixin_back_project.uav_order.service.OrderService;
+import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -118,16 +116,16 @@ public class OrderController {
     }
 
     @PutMapping("toRefundRentOrder")
-    public ResultEntity<Integer> toRefundRentOrder(@RequestBody ToRefundDto toRefundDto) throws Exception {
-        int count = orderService.toRefundRentOrder(toRefundDto);
-        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+    public ResultEntity<UserVo> toRefundRentOrder(@RequestBody ToRefundDto toRefundDto) throws Exception {
+        UserVo userVo = orderService.toRefundRentOrder(toRefundDto);
+        ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
         return resultEntity;
     }
 
     @PutMapping("toRefundSaleOrder")
-    public ResultEntity<Integer> toRefundSaleOrder(@RequestBody ToRefundDto toRefundDto) throws Exception {
-        int count = orderService.toRefundSaleOrder(toRefundDto);
-        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+    public ResultEntity<UserVo> toRefundSaleOrder(@RequestBody ToRefundDto toRefundDto) throws Exception {
+        UserVo userVo = orderService.toRefundSaleOrder(toRefundDto);
+        ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
         return resultEntity;
     }
 
@@ -247,6 +245,20 @@ public class OrderController {
     public ResultEntity<List<MySellInfoVo>> getEvaluateSaleList(@PathVariable Integer userId) throws Exception {
         List<MySellInfoVo> evaluateSaleList = orderService.getEvaluateSaleList(userId);
         ResultEntity<List<MySellInfoVo>> resultEntity = new ResultEntity<>(evaluateSaleList);
+        return resultEntity;
+    }
+
+    @PutMapping("toRefundDeposit")
+    public ResultEntity<Integer> toRefundDeposit(@RequestBody RefundDepositDto depositDto) throws Exception {
+        int count = orderService.toRefundDeposit(depositDto);
+        ResultEntity<Integer> resultEntity = new ResultEntity<>(count);
+        return resultEntity;
+    }
+
+    @GetMapping("getRefundDepositInfo/{orderId}")
+    public ResultEntity<RefundDepositVo> getRefundDepositInfo(@PathVariable Integer orderId) throws Exception {
+        RefundDepositVo refundDepositVo = orderService.getRefundDepositInfo(orderId);
+        ResultEntity<RefundDepositVo> resultEntity = new ResultEntity<>(refundDepositVo);
         return resultEntity;
     }
 }

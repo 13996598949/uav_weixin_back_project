@@ -33,6 +33,16 @@ public class RentProductDetailVo extends Model {
 
     private String lastUpdateTimeStr;
 
+    private Double deposit;
+
+    public Double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(Double deposit) {
+        this.deposit = deposit;
+    }
+
     private boolean isCollectFlag = false;
 
     public Integer getUserId() {

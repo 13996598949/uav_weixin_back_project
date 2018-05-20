@@ -2,10 +2,8 @@ package com.lp.uav_weixin_back_project.uav_order.service;
 
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.*;
+import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
 
 import java.util.List;
 
@@ -39,9 +37,9 @@ public interface OrderService {
 
     OrderInfoVo toPaySaleOrder(PayDto payDto) throws MyError;
 
-    int toRefundRentOrder(ToRefundDto refundDto);
+    UserVo toRefundRentOrder(ToRefundDto refundDto);
 
-    int toRefundSaleOrder(ToRefundDto refundDto);
+    UserVo toRefundSaleOrder(ToRefundDto refundDto);
 
     int toRentDelicery(ToDeliveryDto deliveryDto);
 
@@ -76,4 +74,8 @@ public interface OrderService {
     List<MySellInfoVo> getEvaluateRentList(Integer userId);
 
     List<MySellInfoVo> getEvaluateSaleList(Integer userId);
+
+    int toRefundDeposit(RefundDepositDto depositDto);
+
+    RefundDepositVo getRefundDepositInfo(Integer orderId);
 }

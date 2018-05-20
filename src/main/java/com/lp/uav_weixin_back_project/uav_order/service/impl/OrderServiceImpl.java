@@ -3,11 +3,9 @@ package com.lp.uav_weixin_back_project.uav_order.service.impl;
 import com.lp.uav_weixin_back_project.db.BaseDao;
 import com.lp.uav_weixin_back_project.exception.MyError;
 import com.lp.uav_weixin_back_project.uav_order.model.dto.*;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.CountOrderVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.EvaluateInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.MySellInfoVo;
-import com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo;
+import com.lp.uav_weixin_back_project.uav_order.model.vo.*;
 import com.lp.uav_weixin_back_project.uav_order.service.OrderService;
+import com.lp.uav_weixin_back_project.user.model.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -177,14 +175,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public OrderInfoVo toPayRentOrder(PayDto payDto) throws MyError {
         Map<String,Object> map = new HashMap<>();
         map.put("userId",payDto.getUserId());
         String buyPassword = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getBuyPassword",map);
         if (buyPassword.equals(payDto.getBuyPassword())) {
             map.put("orderId",payDto.getOrderId());
+            // 生成订单
             int count = baseDao.update("com.lp.sqlMapper.order.OrderRent.toPayRent",map);
+            // 扣除账户余额
+            map.put("price",payDto.getPrice());
+            baseDao.update("com.lp.sqlMapper.user.User.deductAccount",map);
             OrderInfoVo orderInfoVo = this.getRentOrderInfo(payDto.getOrderId());
+            int id = payDto.getUserId();
+            UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+            orderInfoVo.setUserVo(userVo);
             return orderInfoVo;
 
         }else {
@@ -193,14 +199,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public OrderInfoVo toPaySaleOrder(PayDto payDto) throws MyError {
         Map<String,Object> map = new HashMap<>();
         map.put("userId",payDto.getUserId());
         String buyPassword = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getBuyPassword",map);
         if (buyPassword.equals(payDto.getBuyPassword())) {
             map.put("orderId",payDto.getOrderId());
+            // 生成订单
             int count = baseDao.update("com.lp.sqlMapper.order.OrderSale.toPaySale",map);
+            // 扣除账户余额
+            map.put("price",payDto.getPrice());
+            baseDao.update("com.lp.sqlMapper.user.User.deductAccount",map);
             OrderInfoVo orderInfoVo = this.getSaleOrderInfo(payDto.getOrderId());
+            int id = payDto.getUserId();
+            UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+            orderInfoVo.setUserVo(userVo);
             return orderInfoVo;
 
         }else {
@@ -209,15 +223,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int toRefundRentOrder(ToRefundDto refundDto) {
+    public UserVo toRefundRentOrder(ToRefundDto refundDto) {
+        // 更改流程
         int count = baseDao.update("com.lp.sqlMapper.order.OrderRent.toRefundRentOrder", refundDto);
-        return count;
+        // 退款
+        baseDao.update("com.lp.sqlMapper.user.User.refundMoney",refundDto);
+        // 更新用户信息
+        int id = refundDto.getUserId();
+        UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+        return userVo;
     }
 
     @Override
-    public int toRefundSaleOrder(ToRefundDto refundDto) {
+    public UserVo toRefundSaleOrder(ToRefundDto refundDto) {
+        // 更改流程
         int count = baseDao.update("com.lp.sqlMapper.order.OrderSale.toRefundSaleOrder", refundDto);
-        return count;
+        // 退款
+        baseDao.update("com.lp.sqlMapper.user.User.refundMoney",refundDto);
+        // 更新用户信息
+        int id = refundDto.getUserId();
+        UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+        return userVo;
     }
 
     @Override
@@ -408,6 +434,17 @@ public class OrderServiceImpl implements OrderService {
     public List<MySellInfoVo> getEvaluateSaleList(Integer userId) {
         List<MySellInfoVo> evaluateSaleList = baseDao.getList("com.lp.sqlMapper.order.OrderSale.getEvaluateSaleList",userId);
         return evaluateSaleList;
+    }
+
+    @Override
+    public int toRefundDeposit(RefundDepositDto depositDto) {
+        int count = baseDao.update("com.lp.sqlMapper.order.OrderRent.toRefundDeposit",depositDto);
+        return count;
+    }
+
+    @Override
+    public RefundDepositVo getRefundDepositInfo(Integer orderId) {
+        return null;
     }
 
 

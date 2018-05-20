@@ -12,7 +12,7 @@
     b.active AS active
     FROM sale_product a
     LEFT JOIN order_sale b ON a.id = b.sale_product_id
-    WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look=0
+    WHERE b.sell_id = #{userId} AND a.flag=1 AND b.sale_look=0 ORDER BY b.create_time DESC
   </select>
 
   <update id="deleteSaleOrder" parameterType="java.util.Map">
@@ -99,7 +99,7 @@
     b.active AS active
     FROM sale_product a
     LEFT JOIN order_sale b ON a.id = b.sale_product_id
-    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0
+    WHERE b.buy_id = #{userId} AND a.flag=1 AND b.buy_look=0 ORDER BY b.create_time DESC
   </select>
 
   <select id="getSaleOrderInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.OrderInfoVo">

@@ -31,6 +31,16 @@ public class UserVo extends Model {
 
     private String birthdayStr;
 
+    private Double account;
+
+    public Double getAccount() {
+        return account;
+    }
+
+    public void setAccount(Double account) {
+        this.account = account;
+    }
+
     public String getBirthdayStr() {
         return birthdayStr;
     }

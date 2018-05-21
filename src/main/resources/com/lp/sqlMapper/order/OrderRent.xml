@@ -335,7 +335,7 @@
   <update id="toRefundDeposit" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.RefundDepositDto">
     UPDATE order_rent
     <set>
-      acitve = 6,
+      active = 6,
       <if test="postCompany!=null">
         deposit_post_company=#{postCompany},
       </if>
@@ -345,4 +345,35 @@
     </set>
     WHERE id=#{orderId}
   </update>
+
+  <select id="getRefundDepositInfo" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.RefundDepositVo">
+    SELECT
+    a.id AS orderId,
+    b.rent_product_name AS rent_product_name,
+    b.rent_product_picture AS rent_product_picture,
+    a.deposit_post_company AS postCompany,
+    a.deposit_post_num AS postNum,
+    a.order_num AS orderNum,
+    a.create_time AS createTime,
+    a.active AS active
+    FROM order_rent a
+    LEFT JOIN rent_product b ON a.rent_product_id = b.id
+    WHERE a.id=#{orderId}
+  </select>
+
+  <update id="sellRefundDeposit" parameterType="java.lang.Integer">
+    UPDATE order_rent
+    set active=7
+    WHERE id=#{orderId}
+  </update>
+
+  <select id="getDeposit" parameterType="java.lang.Integer" resultType="com.lp.uav_weixin_back_project.uav_order.model.vo.MoneyVo">
+    SELECT
+    a.deposit AS money,
+    b.buy_id AS buyId
+    FROM rent_product a
+    LEFT JOIN order_rent b ON a.id = b.rent_product_id
+    WHERE b.id=#{orderId}
+  </select>
+
 </mapper>

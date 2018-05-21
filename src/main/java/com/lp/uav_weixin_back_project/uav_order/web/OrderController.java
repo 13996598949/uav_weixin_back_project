@@ -261,4 +261,11 @@ public class OrderController {
         ResultEntity<RefundDepositVo> resultEntity = new ResultEntity<>(refundDepositVo);
         return resultEntity;
     }
+
+    @PutMapping("sellRefundDeposit")
+    public ResultEntity<UserVo> sellRefundDeposit(@RequestBody DepositDto depositDto) throws Exception {
+        UserVo userVo = orderService.sellRefundDeposit(depositDto);
+        ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
+        return resultEntity;
+    }
 }

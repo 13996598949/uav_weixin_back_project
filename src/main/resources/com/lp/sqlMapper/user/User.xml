@@ -366,7 +366,7 @@
       WHERE id=#{userId}
     </update>
 
-    <update id="refundMoney" parameterType="com.lp.uav_weixin_back_project.uav_order.model.dto.ToRefundDto">
+    <update id="refundMoney" parameterType="java.util.Map">
         UPDATE user
       set account = account+#{price}
       WHERE id=#{userId}

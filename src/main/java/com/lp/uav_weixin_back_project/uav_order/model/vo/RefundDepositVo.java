@@ -19,6 +19,16 @@ public class RefundDepositVo {
 
     private String createTimeStr;
 
+    private Integer active;
+
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
+    }
+
     public Integer getOrderId() {
         return orderId;
     }

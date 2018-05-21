@@ -78,4 +78,6 @@ public interface OrderService {
     int toRefundDeposit(RefundDepositDto depositDto);
 
     RefundDepositVo getRefundDepositInfo(Integer orderId);
+
+    UserVo sellRefundDeposit(DepositDto depositDto) throws MyError;
 }

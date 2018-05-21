@@ -10,6 +10,16 @@ public class PayDto {
 
     private Double price;
 
+    private Integer sellId;
+
+    public Integer getSellId() {
+        return sellId;
+    }
+
+    public void setSellId(Integer sellId) {
+        this.sellId = sellId;
+    }
+
     public Double getPrice() {
         return price;
     }

@@ -82,7 +82,7 @@ public class RentServiceImpl implements RentService {
             String fileName = multipartFile.getOriginalFilename();
             fileName = System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));
             try {
-                uploadFile(multipartFile.getBytes(), "D:/UAV_img/product", fileName);
+                uploadFile(multipartFile.getBytes(), "C:/UAV_img/product", fileName);
             } catch (Exception e) {
                 throw new MyError("图片保存失败");
             }

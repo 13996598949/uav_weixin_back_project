@@ -187,9 +187,9 @@ public class OrderServiceImpl implements OrderService {
             // 扣除账户余额
             map.put("price",payDto.getPrice());
             baseDao.update("com.lp.sqlMapper.user.User.deductAccount",map);
-            // 增加卖家账户余额
-            map.put("userId",payDto.getSellId());
-            baseDao.update("com.lp.sqlMapper.user.User.refundMoney",map);
+//            // 增加卖家账户余额
+//            map.put("userId",payDto.getSellId());
+//            baseDao.update("com.lp.sqlMapper.user.User.refundMoney",map);
 
             OrderInfoVo orderInfoVo = this.getRentOrderInfo(payDto.getOrderId());
             int id = payDto.getUserId();
@@ -289,6 +289,10 @@ public class OrderServiceImpl implements OrderService {
         if (buyPassword.equals(confirmDto.getBuyPassword())) {
             map.put("orderId",confirmDto.getOrderId());
             int count = baseDao.update("com.lp.sqlMapper.order.OrderRent.toConfirmRentOrder",map);
+            // 增加卖家账户余额
+            map.put("userId",confirmDto.getSellId());
+            map.put("price",confirmDto.getPrice());
+            baseDao.update("com.lp.sqlMapper.user.User.refundMoney",map);
             OrderInfoVo orderInfoVo = this.getRentOrderInfo(confirmDto.getOrderId());
             return orderInfoVo;
 

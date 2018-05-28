@@ -118,4 +118,11 @@ public class UserController {
         ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
         return resultEntity;
     }
+
+    @GetMapping("getUserInfoById/{id}")
+    public ResultEntity<UserVo> getUserInfoById(@PathVariable int id) throws Exception {
+        UserVo userVo = userService.getUserInfoById(id);
+        ResultEntity<UserVo> resultEntity = new ResultEntity<>(userVo);
+        return resultEntity;
+    }
 }

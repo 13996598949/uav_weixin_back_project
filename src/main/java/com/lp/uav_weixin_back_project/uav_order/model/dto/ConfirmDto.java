@@ -8,6 +8,26 @@ public class ConfirmDto {
 
     private String buyPassword;
 
+    private Integer sellId;
+
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getSellId() {
+        return sellId;
+    }
+
+    public void setSellId(Integer sellId) {
+        this.sellId = sellId;
+    }
+
     public Integer getUserId() {
         return userId;
     }

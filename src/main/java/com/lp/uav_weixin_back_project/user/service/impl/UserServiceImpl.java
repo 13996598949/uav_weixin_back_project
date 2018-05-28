@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         String fileName = multipartFile.getOriginalFilename();
         fileName = System.currentTimeMillis()+fileName.substring(fileName.lastIndexOf("."));
         try {
-            uploadFile(multipartFile.getBytes(), "D:/UAV_img/header" , fileName);
+            uploadFile(multipartFile.getBytes(), "C:/UAV_img/header" , fileName);
         } catch (Exception e) {
             throw new MyError("头像保存失败");
         }
@@ -303,6 +303,12 @@ public class UserServiceImpl implements UserService {
         }else {
             throw new MyError("交易密码输入错误，请重新输入！");
         }
+    }
+
+    @Override
+    public UserVo getUserInfoById(int id) {
+        UserVo userVo = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getUserInfoById",id);
+        return userVo;
     }
 
     /**

@@ -17,7 +17,7 @@ spring:
   mvc:
     static-path-pattern: /**
   resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:D:\UAV_img
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:C:\UAV_img
 mybatis:
   mapper-locations:
     - classpath*:/com/lp/sqlMapper/**/*.xml

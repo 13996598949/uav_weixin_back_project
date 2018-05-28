@@ -49,4 +49,6 @@ public interface UserService {
     int resetPassword(ResetDto resetDto) throws MyError;
 
     UserVo updateAccount(AccountDto accountDto) throws MyError;
+
+    UserVo getUserInfoById(int id);
 }

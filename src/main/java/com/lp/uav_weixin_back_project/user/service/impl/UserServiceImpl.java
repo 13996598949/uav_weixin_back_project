@@ -221,8 +221,12 @@ public class UserServiceImpl implements UserService {
         Map<String,Object> userMap = new HashMap<>();
         userMap.put("userName",userName);
         String userTelephone = baseDao.getOneBySqlId("com.lp.sqlMapper.user.User.getTelephone",userName);
-        if (!userTelephone.equals(telephone)|| userTelephone.equals("")){
-            throw new MyError("手机号输入错误，手机号需为用户名注册时的手机号");
+        if(userTelephone!=null && !userTelephone.equals("")) {
+            if (!userTelephone.equals(telephone) || userTelephone.equals("")) {
+                throw new MyError("手机号输入错误，手机号需为用户名注册时的手机号");
+            }
+        }else {
+            throw new MyError("用户名不存在，请正确填写！");
         }
 
         HttpClient client = new HttpClient();

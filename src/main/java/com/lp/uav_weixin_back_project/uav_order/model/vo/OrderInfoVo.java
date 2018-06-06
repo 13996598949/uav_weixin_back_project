@@ -56,7 +56,27 @@ public class OrderInfoVo {
 
     private Double deposit;
 
+    private String depositPostCompany;
+
+    private String depositPostNum;
+
     private UserVo userVo;
+
+    public String getDepositPostCompany() {
+        return depositPostCompany;
+    }
+
+    public void setDepositPostCompany(String depositPostCompany) {
+        this.depositPostCompany = depositPostCompany;
+    }
+
+    public String getDepositPostNum() {
+        return depositPostNum;
+    }
+
+    public void setDepositPostNum(String depositPostNum) {
+        this.depositPostNum = depositPostNum;
+    }
 
     public UserVo getUserVo() {
         return userVo;
